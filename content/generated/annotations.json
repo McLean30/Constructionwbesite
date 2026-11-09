@@ -1,0 +1,199 @@
+{
+  "stage-foundations": [
+    {
+      "id": "slab",
+      "label": "Insulated ground slab",
+      "stage": "foundations",
+      "x": 39.7,
+      "y": 49.35
+    },
+    {
+      "id": "void",
+      "label": "Courtyard void",
+      "stage": "foundations",
+      "x": 47.23,
+      "y": 60.77
+    },
+    {
+      "id": "grid",
+      "label": "Setting-out grid",
+      "stage": "foundations",
+      "x": 81.83,
+      "y": 50.95
+    }
+  ],
+  "stage-structure": [
+    {
+      "id": "goalpost",
+      "label": "Steel goalpost frame",
+      "stage": "structure",
+      "x": 28.82,
+      "y": 55.83
+    },
+    {
+      "id": "rafters",
+      "label": "Ridge beam and rafters",
+      "stage": "structure",
+      "x": 66.45,
+      "y": 54.46
+    },
+    {
+      "id": "block",
+      "label": "Blockwork inner leaf",
+      "stage": "structure",
+      "x": 68.44,
+      "y": 61.25
+    }
+  ],
+  "stage-envelope": [
+    {
+      "id": "glazing",
+      "label": "Glazed garden screen",
+      "stage": "envelope",
+      "x": 27.07,
+      "y": 57.38
+    },
+    {
+      "id": "zinc",
+      "label": "Standing-seam zinc",
+      "stage": "envelope",
+      "x": 40.15,
+      "y": 44.33
+    },
+    {
+      "id": "brick",
+      "label": "Pale buff brick",
+      "stage": "envelope",
+      "x": 51.68,
+      "y": 62.25
+    }
+  ],
+  "stage-finish": [
+    {
+      "id": "soffit",
+      "label": "Oak-lined soffit",
+      "stage": "finish",
+      "x": 24.44,
+      "y": 52.56
+    },
+    {
+      "id": "oak",
+      "label": "Oak frames",
+      "stage": "finish",
+      "x": 26.1,
+      "y": 57.45
+    },
+    {
+      "id": "courtyard",
+      "label": "Planted courtyard",
+      "stage": "finish",
+      "x": 49.69,
+      "y": 57.54
+    }
+  ],
+  "hero": [
+    {
+      "id": "soffit",
+      "label": "Oak-lined soffit",
+      "stage": "finish",
+      "x": 11.55,
+      "y": 47.5
+    },
+    {
+      "id": "zinc",
+      "label": "Standing-seam zinc",
+      "stage": "envelope",
+      "x": 33.22,
+      "y": 47.76
+    },
+    {
+      "id": "courtyard",
+      "label": "Planted courtyard",
+      "stage": "finish",
+      "x": 50.37,
+      "y": 71.29
+    },
+    {
+      "id": "brick",
+      "label": "Pale buff brick",
+      "stage": "envelope",
+      "x": 67.46,
+      "y": 52.49
+    }
+  ],
+  "street": [
+    {
+      "id": "entrance",
+      "label": "Entrance in the link",
+      "stage": "envelope",
+      "x": 56.5,
+      "y": 56.03
+    }
+  ],
+  "detail": [
+    {
+      "id": "zinc",
+      "n": 1,
+      "label": "Standing-seam zinc on plywood deck",
+      "x": 67.5,
+      "y": 10.43
+    },
+    {
+      "id": "rafters",
+      "n": 2,
+      "label": "Rafters with insulation between",
+      "x": 18.75,
+      "y": 10.43
+    },
+    {
+      "id": "fascia",
+      "n": 3,
+      "label": "Folded zinc fascia and drip",
+      "x": 87.5,
+      "y": 48.7
+    },
+    {
+      "id": "soffit",
+      "n": 4,
+      "label": "Oak soffit boards on battens",
+      "x": 73.75,
+      "y": 66.09
+    },
+    {
+      "id": "brick",
+      "n": 5,
+      "label": "Pale buff brick outer leaf",
+      "x": 51.25,
+      "y": 78.26
+    },
+    {
+      "id": "cavity",
+      "n": 6,
+      "label": "Insulated cavity",
+      "x": 18.75,
+      "y": 48.7
+    },
+    {
+      "id": "block",
+      "n": 7,
+      "label": "Blockwork inner leaf, plastered",
+      "x": 15,
+      "y": 60.87
+    },
+    {
+      "id": "steel",
+      "n": 8,
+      "label": "Painted steel goalpost beam",
+      "x": 15,
+      "y": 74.78
+    },
+    {
+      "id": "oak",
+      "n": 9,
+      "label": "Oak glazing frame",
+      "x": 51.25,
+      "y": 89.57
+    }
+  ],
+  "interior": []
+}
