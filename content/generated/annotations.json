@@ -22,6 +22,29 @@
       "y": 50.95
     }
   ],
+  "plate-foundations": [
+    {
+      "id": "slab",
+      "label": "Insulated ground slab",
+      "stage": "foundations",
+      "x": 39.52,
+      "y": 42.41
+    },
+    {
+      "id": "void",
+      "label": "Courtyard void",
+      "stage": "foundations",
+      "x": 47.18,
+      "y": 56.31
+    },
+    {
+      "id": "grid",
+      "label": "Setting-out grid",
+      "stage": "foundations",
+      "x": 82.4,
+      "y": 44.35
+    }
+  ],
   "stage-structure": [
     {
       "id": "goalpost",
@@ -34,8 +57,8 @@
       "id": "rafters",
       "label": "Ridge beam and rafters",
       "stage": "structure",
-      "x": 66.45,
-      "y": 54.46
+      "x": 44.91,
+      "y": 39
     },
     {
       "id": "block",
@@ -43,6 +66,29 @@
       "stage": "structure",
       "x": 68.44,
       "y": 61.25
+    }
+  ],
+  "plate-structure": [
+    {
+      "id": "goalpost",
+      "label": "Steel goalpost frame",
+      "stage": "structure",
+      "x": 28.44,
+      "y": 50.3
+    },
+    {
+      "id": "rafters",
+      "label": "Ridge beam and rafters",
+      "stage": "structure",
+      "x": 44.82,
+      "y": 29.82
+    },
+    {
+      "id": "block",
+      "label": "Blockwork inner leaf",
+      "stage": "structure",
+      "x": 68.77,
+      "y": 56.89
     }
   ],
   "stage-envelope": [
@@ -68,6 +114,29 @@
       "y": 62.25
     }
   ],
+  "plate-envelope": [
+    {
+      "id": "glazing",
+      "label": "Glazed garden screen",
+      "stage": "envelope",
+      "x": 26.67,
+      "y": 52.18
+    },
+    {
+      "id": "zinc",
+      "label": "Standing-seam zinc",
+      "stage": "envelope",
+      "x": 39.97,
+      "y": 36.31
+    },
+    {
+      "id": "brick",
+      "label": "Pale buff brick",
+      "stage": "envelope",
+      "x": 51.71,
+      "y": 58.11
+    }
+  ],
   "stage-finish": [
     {
       "id": "soffit",
@@ -89,6 +158,29 @@
       "stage": "finish",
       "x": 49.69,
       "y": 57.54
+    }
+  ],
+  "plate-finish": [
+    {
+      "id": "soffit",
+      "label": "Oak-lined soffit",
+      "stage": "finish",
+      "x": 23.98,
+      "y": 46.32
+    },
+    {
+      "id": "oak",
+      "label": "Oak frames",
+      "stage": "finish",
+      "x": 25.68,
+      "y": 52.27
+    },
+    {
+      "id": "courtyard",
+      "label": "Planted courtyard",
+      "stage": "finish",
+      "x": 49.69,
+      "y": 52.38
     }
   ],
   "hero": [

@@ -14,6 +14,8 @@ interface Props {
   objectPosition?: string;
   /** Hide the labels and legend on phones, where they would push the next action off screen. */
   compactOnMobile?: boolean;
+  /** Dense drawings: keep labels on the image only on wide screens, use the legend below that. */
+  wideLabels?: boolean;
 }
 
 /**
@@ -21,9 +23,9 @@ interface Props {
  * on wider screens; on phones they become numbered markers with a legend below.
  * The overlay is decorative (the alt text and legend carry the information).
  */
-export function AnnotatedFigure({ image, alt, caption, annotations = [], sizes, priority, className, fill, objectPosition, compactOnMobile }: Props) {
+export function AnnotatedFigure({ image, alt, caption, annotations = [], sizes, priority, className, fill, objectPosition, compactOnMobile, wideLabels }: Props) {
   return (
-    <figure className={`annotated ${fill ? "annotated--fill" : ""} ${compactOnMobile ? "annotated--compact" : ""} ${className ?? ""}`}>
+    <figure className={`annotated ${fill ? "annotated--fill" : ""} ${compactOnMobile ? "annotated--compact" : ""} ${wideLabels ? "annotated--wide-labels" : ""} ${className ?? ""}`}>
       <div className="annotated__frame">
         <Image
           src={image}

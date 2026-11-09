@@ -1,10 +1,10 @@
 import Image from "next/image";
 import Link from "next/link";
-import { AnnotatedFigure } from "@/components/AnnotatedFigure";
 import { EnquiryForm } from "@/components/EnquiryForm";
+import { HeroVisual } from "@/components/HeroVisual";
 import { StageExplorer } from "@/components/StageExplorer";
-import { courtyardHouse, gallery, heroImage } from "@/content/courtyard-house";
-import { primaryAction, secondaryAction, services } from "@/content/site";
+import { courtyardHouse, gallery } from "@/content/courtyard-house";
+import { primaryAction, services } from "@/content/site";
 
 export default function HomePage() {
   const street = gallery.find((g) => g.id === "street")!;
@@ -12,40 +12,43 @@ export default function HomePage() {
 
   return (
     <>
-      {/* ---------- Hero ---------- */}
+      {/* ---------- Hero: the architecture first ---------- */}
       <section className="hero" aria-labelledby="hero-title">
-        <div className="hero__text">
-          <p className="eyebrow">Residential builders · Glasgow</p>
-          <h1 id="hero-title" className="display hero__title">
-            New homes, extensions and renovations in Glasgow.
-          </h1>
-          <p className="hero__lede">
-            We build houses that are calm from the street and generous to the garden. We start from the drawings and finish with the last oak board, and
-            we keep you close to the work at every stage.
-          </p>
-          <div className="actions hero__actions">
-            <Link href={primaryAction.href} className="button button--primary">
-              {primaryAction.label}
-            </Link>
-            <Link href={secondaryAction.href} className="button button--ghost">
-              {secondaryAction.label}
-            </Link>
+        <div className="hero__band">
+          <div className="hero__title-block">
+            <p className="eyebrow">Concept project · West of Scotland</p>
+            <h1 id="hero-title" className="display hero__title">
+              {courtyardHouse.title}
+            </h1>
+          </div>
+          <div className="hero__offer">
+            <p className="hero__service">New homes, extensions and renovations in Glasgow.</p>
+            <div className="actions hero__actions">
+              <Link href={primaryAction.href} className="button button--primary">
+                {primaryAction.label}
+              </Link>
+              <Link href="/projects/courtyard-house" className="button button--ghost">
+                Explore the house
+              </Link>
+            </div>
           </div>
         </div>
-        <div className="hero__media">
-          <AnnotatedFigure
-            image={heroImage.image}
-            alt={heroImage.alt}
-            annotations={heroImage.annotations}
-            sizes="(min-width: 960px) 66vw, 100vw"
-            priority
-            compactOnMobile
-            caption={
-              <>
-                <strong>Courtyard House</strong>, garden elevation. Concept illustration.
-              </>
-            }
-          />
+        <HeroVisual />
+      </section>
+
+      {/* ---------- Build process: the construction plate ---------- */}
+      <section id="build-process" className="plate-section" aria-labelledby="process-title">
+        <div className="plate-section__inner">
+          <header className="plate-section__head">
+            <p className="eyebrow eyebrow--light">Build process · Four stages</p>
+            <h2 id="process-title" className="display display--lg">
+              See how the house comes together.
+            </h2>
+            <p className="plate-section__lede">
+              One drawing, one viewpoint, four stages. Choose a stage, or use the arrow keys, and the part being added is picked out in safety orange.
+            </p>
+          </header>
+          <StageExplorer headingId="process-title" />
         </div>
       </section>
 
@@ -80,7 +83,7 @@ export default function HomePage() {
           </div>
           <figure className="feature__inset">
             <Image src={interior.image} alt={interior.alt} sizes="(min-width: 960px) 30vw, 60vw" placeholder="blur" quality={80} />
-            <figcaption>From the living room into the courtyard. Concept illustration.</figcaption>
+            <figcaption>From the sitting room into the courtyard. Concept illustration.</figcaption>
           </figure>
         </div>
       </section>
@@ -116,27 +119,11 @@ export default function HomePage() {
         </ol>
       </section>
 
-      {/* ---------- Build process ---------- */}
-      <section id="build-process" className="section process" aria-labelledby="process-title">
-        <header className="section__head">
-          <p className="section__index">03</p>
-          <p className="eyebrow">Build process</p>
-          <h2 id="process-title" className="display display--md">
-            How the house comes together
-          </h2>
-          <p className="section__lede">
-            Courtyard House in four stages, all drawn from the same viewpoint. Choose a stage, or use the arrow keys, to see what is added and why. New work
-            is outlined in orange.
-          </p>
-        </header>
-        <StageExplorer headingId="process-title" />
-      </section>
-
       {/* ---------- Enquiry ---------- */}
       <section id="enquire" className="section enquire" aria-labelledby="enquire-title">
         <div className="enquire__grid">
           <header className="section__head enquire__intro">
-            <p className="section__index">04</p>
+            <p className="section__index">03</p>
             <p className="eyebrow">Discuss your project</p>
             <h2 id="enquire-title" className="display display--md">
               Tell us what you have in mind.

@@ -47,11 +47,19 @@ export interface Stage {
   description: string[];
   /** Short notes on what to look for in the drawing. */
   added: string[];
+  /** Drawing anchor ids, in the same order as `added`, numbered on the plate. */
+  markers: string[];
   illustration: {
     src: string;
     width: number;
     height: number;
     alt: string;
+  };
+  /** The same drawing as a graphite construction plate (homepage explorer). */
+  plate: {
+    src: string;
+    width: number;
+    height: number;
   };
   modelLayers: ModelLayer[];
   /** Camera hint for milestone two: progress through the assembly, 0 to 1. */
@@ -79,6 +87,8 @@ const drawing = (id: StageId, alt: string) => ({
   alt,
 });
 
+const plate = (id: StageId) => ({ src: `/stages/plate-${id}.svg`, width: 1600, height: 920 });
+
 export const stages: Stage[] = [
   {
     id: "foundations",
@@ -94,6 +104,8 @@ export const stages: Stage[] = [
       "Insulated concrete slab under each wing",
       "Courtyard void left open to the sky",
     ],
+    markers: ["grid", "slab", "void"],
+    plate: plate("foundations"),
     illustration: drawing(
       "foundations",
       "Axonometric drawing of the Courtyard House site with only the concrete slabs in place: a U-shaped footprint of two long wings joined at the street, around an empty hatched courtyard.",
@@ -120,6 +132,8 @@ export const stages: Stage[] = [
       "Steel goalpost frames forming the garden openings",
       "Ridge beams and rafters for both wings",
     ],
+    markers: ["block", "goalpost", "rafters"],
+    plate: plate("structure"),
     illustration: drawing(
       "structure",
       "The same axonometric view with grey blockwork walls on the slabs, orange steel frames at the garden end of each wing and open timber rafters over both roofs.",
@@ -145,6 +159,8 @@ export const stages: Stage[] = [
       "Glazed screens to the garden and courtyard",
       "Standing-seam zinc roofs with deep garden overhangs",
     ],
+    markers: ["brick", "glazing", "zinc"],
+    plate: plate("envelope"),
     illustration: drawing(
       "envelope",
       "The same view with buff brick walls, large glass screens to the garden and courtyard, and dark zinc roofs with standing seams overhanging the garden ends.",
@@ -170,6 +186,8 @@ export const stages: Stage[] = [
       "Timber-lined soffits to the garden overhangs",
       "Floor finishes, sandstone paving and courtyard planting",
     ],
+    markers: ["oak", "soffit", "courtyard"],
+    plate: plate("finish"),
     illustration: drawing(
       "finish",
       "The completed Courtyard House in the same axonometric view, with oak-lined soffits, a paved and planted courtyard with a tree, and people using the garden terrace.",

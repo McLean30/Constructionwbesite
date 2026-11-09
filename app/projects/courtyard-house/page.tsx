@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { AnnotatedFigure } from "@/components/AnnotatedFigure";
-import { courtyardHouse, gallery, heroImage } from "@/content/courtyard-house";
+import { courtyardHouse, gallery, soffitImage, visualisationImage } from "@/content/courtyard-house";
 import { stages } from "@/content/stages";
 
 export const metadata: Metadata = {
@@ -11,21 +11,30 @@ export const metadata: Metadata = {
 };
 
 export default function CourtyardHousePage() {
-  const [, ...rest] = gallery;
+  const view = (id: string) => gallery.find((g) => g.id === id)!;
+  const garden = view("garden");
+  const detail = view("detail");
+  const moreViews = ["street", "interior", "construction"].map(view);
+
   return (
     <article className="project">
-      {/* ---------- Opening ---------- */}
+      {/* ---------- Opening: the courtyard visualisation ---------- */}
       <header className="project__hero">
-        <div className="project__hero-media">
-          <AnnotatedFigure
-            image={heroImage.image}
-            alt={heroImage.alt}
+        <figure className="project__hero-media">
+          <Image
+            src={visualisationImage.image}
+            alt={visualisationImage.alt}
             sizes="100vw"
+            quality={80}
+            placeholder="blur"
             priority
-            fill
-            objectPosition="45% 62%"
+            className="project__hero-img"
           />
-        </div>
+          <figcaption className="hero-visual__caption">
+            <span className="hero-visual__label">{visualisationImage.caption}</span>
+            <span className="hero-visual__desc">{visualisationImage.description}</span>
+          </figcaption>
+        </figure>
         <div className="project__hero-text">
           <nav aria-label="Breadcrumb" className="breadcrumb">
             <ol>
@@ -54,13 +63,71 @@ export default function CourtyardHousePage() {
             </div>
           ))}
         </dl>
-        <p className="demo-note">Courtyard House is a fictional concept created for this demo. It has not been built, and the household described is illustrative.</p>
+        <p className="demo-note">
+          Courtyard House is a fictional concept created for this demo and has not been built. The opening image is an AI-generated concept visualisation. The
+          other views are original illustrations and drawings, so small details differ between them.
+        </p>
+      </section>
+
+      {/* ---------- From the whole house to one junction ---------- */}
+      <section className="section sequence" aria-labelledby="sequence-title">
+        <header className="section__head">
+          <p className="section__index">01</p>
+          <h2 id="sequence-title" className="display display--md">
+            From the whole house to one junction
+          </h2>
+          <p className="section__lede">
+            The idea of the house holds at every scale: a calm brick body, a thin zinc lid and warm oak where the two meet.
+          </p>
+        </header>
+
+        <div className="sequence__step sequence__step--whole">
+          <p className="sequence__label">
+            <span>A</span> The whole house
+          </p>
+          <AnnotatedFigure image={garden.image} alt={garden.alt} caption={garden.caption} sizes="(min-width: 1480px) 1400px, 100vw" />
+          <p className="sequence__note">{garden.notice}</p>
+        </div>
+
+        <div className="sequence__pair">
+          <div className="sequence__step sequence__step--crop">
+            <p className="sequence__label">
+              <span>B</span> Where zinc meets oak
+            </p>
+            <figure className="detail-crop">
+              <Image src={soffitImage.image} alt={soffitImage.alt} sizes="(min-width: 960px) 422px, 100vw" quality={80} placeholder="blur" />
+              <figcaption>{soffitImage.caption}</figcaption>
+            </figure>
+          </div>
+          <div className="sequence__pair-text">
+            <p className="pull-quote">A thin dark lid, a warm underside and a pale wall.</p>
+            <p>
+              At the end of each wing the roof runs on past the glass. From the courtyard you see three materials meet in one line: the folded zinc
+              edge, the oak boards beneath it and the buff brick that carries them. The drawing below shows how that line is built.
+            </p>
+          </div>
+        </div>
+
+        <div className="sequence__step sequence__step--drawing">
+          <p className="sequence__label">
+            <span>C</span> How the junction is built
+          </p>
+          <AnnotatedFigure
+            image={detail.image}
+            alt={detail.alt}
+            caption={detail.caption}
+            annotations={detail.annotations}
+            sizes="(min-width: 1480px) 1400px, 100vw"
+            wideLabels
+          />
+          <p className="sequence__note">{detail.notice}</p>
+        </div>
       </section>
 
       {/* ---------- Brief ---------- */}
       <section className="section split" aria-labelledby="brief-title">
         <header className="section__head">
-          <p className="section__index">01</p>
+          <p className="section__index">02</p>
           <h2 id="brief-title" className="display display--md">
             {courtyardHouse.brief.heading}
           </h2>
@@ -75,7 +142,7 @@ export default function CourtyardHousePage() {
       {/* ---------- Layout ---------- */}
       <section className="section split split--figure" aria-labelledby="layout-title">
         <header className="section__head">
-          <p className="section__index">02</p>
+          <p className="section__index">03</p>
           <h2 id="layout-title" className="display display--md">
             {courtyardHouse.layout.heading}
           </h2>
@@ -103,21 +170,24 @@ export default function CourtyardHousePage() {
         </figure>
       </section>
 
-      {/* ---------- Materials ---------- */}
+      {/* ---------- Materials, each beside its detail ---------- */}
       <section className="section materials" aria-labelledby="materials-title">
         <header className="section__head">
-          <p className="section__index">03</p>
+          <p className="section__index">04</p>
           <h2 id="materials-title" className="display display--md">
             Three material decisions
           </h2>
+          <p className="section__lede">Each detail is cropped from the concept visualisation.</p>
         </header>
         <ol className="materials__list">
           {courtyardHouse.materials.map((m, i) => (
-            <li key={m.id} className={`material material--${m.id}`}>
-              <span className="material__swatch" aria-hidden="true" />
-              <p className="material__n" aria-hidden="true">
-                0{i + 1}
-              </p>
+            <li key={m.id} className="material">
+              <figure className="material__figure">
+                <Image src={m.image} alt={m.alt} sizes="(min-width: 900px) 30vw, 100vw" quality={80} placeholder="blur" />
+                <figcaption className="material__label">
+                  <span aria-hidden="true">0{i + 1}</span> {m.title}
+                </figcaption>
+              </figure>
               <h3 className="material__title">{m.title}</h3>
               <p>{m.text}</p>
             </li>
@@ -125,22 +195,19 @@ export default function CourtyardHousePage() {
         </ol>
       </section>
 
-      {/* ---------- Gallery ---------- */}
+      {/* ---------- More views ---------- */}
       <section className="section gallery" aria-labelledby="gallery-title">
         <header className="section__head">
-          <p className="section__index">04</p>
+          <p className="section__index">05</p>
           <h2 id="gallery-title" className="display display--md">
-            Five views of the house
+            More views of the house
           </h2>
-          <p className="section__lede">
-            Each view is an original concept illustration or drawing of this fictional house. The captions point out what to look for.
-          </p>
+          <p className="section__lede">Original concept illustrations and drawings of this fictional house. The notes point out what to look for.</p>
         </header>
         <div className="gallery__items">
-          {[heroImage, ...rest].map((g) => (
+          {moreViews.map((g) => (
             <div key={g.id} className={`gallery__item gallery__item--${g.layout}`} id={`view-${g.id}`}>
               <div className="gallery__meta">
-                <p className="gallery__n">{g.number}</p>
                 <h3 className="gallery__title">{g.title}</h3>
                 <p className="gallery__notice">
                   <span className="gallery__notice-label">What to notice</span>
@@ -162,7 +229,7 @@ export default function CourtyardHousePage() {
       {/* ---------- Stages teaser ---------- */}
       <section className="section stages-teaser" aria-labelledby="stages-title">
         <header className="section__head">
-          <p className="section__index">05</p>
+          <p className="section__index">06</p>
           <h2 id="stages-title" className="display display--md">
             Built in four stages
           </h2>

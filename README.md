@@ -4,7 +4,13 @@ A portfolio demo for **Formwork Construction**, a fictional Glasgow residential 
 
 > Formwork is fictional. The site is kept out of search indexes, and the enquiry form never sends or stores anything.
 
-## Milestone one (this branch)
+## Visual pass (`feature/courtyard-visual-pass`)
+
+- **Homepage hero:** "Courtyard House" headline with the service line, *Discuss your project* and *Explore the house*, and the supplied concept visualisation at full content width. Desktop crops only the foreground, so both rooflines stay in. Phones get a separate square crop centred on the courtyard and the glazed living room, served with `<picture>`.
+- **See how the house comes together:** directly after the hero. The axonometric is shown as a graphite construction plate with the four stages alongside it (below it on phones). The new parts of each stage are tinted and outlined in safety orange, with numbered markers that match the *Added at this stage* list.
+- **Project page:** opens with the visualisation, then moves from the whole house to the zinc-and-oak junction (detail crop) to the section drawing that explains it. Each material decision sits beside a detail cropped from the visualisation.
+
+## Milestone one
 
 - **Homepage** (`/`): image-led hero with both actions, the featured Courtyard House story, three services, the interactive *How the house comes together* stage explorer, a demo enquiry and a footer that labels the site as fictional.
 - **Project page** (`/projects/courtyard-house`): flagship image, *Concept project* label, the homeowners' brief, the courtyard layout, three material decisions, five captioned views and *Discuss a similar project*.
@@ -47,6 +53,12 @@ Regenerate every illustration and drawing (see [ASSETS.md](./ASSETS.md)):
 npm run art
 ```
 
+Regenerate the crops of the supplied concept visualisation:
+
+```bash
+npm run crops
+```
+
 ## Structure
 
 ```
@@ -59,7 +71,8 @@ content/
   generated/             Label positions exported by the art pipeline
 scripts/art/             Procedural model, vector renderer and 2D drawings used to make every image
 art/                     SVG masters of the raster images
-public/images, /stages   Optimised WebP images and stage SVG drawings
+public/images, /stages   WebP images and stage SVG drawings (paper and graphite plates)
+assets-src/              Original supplied concept visualisation (source for the crops)
 ```
 
 Content and stage data are kept apart from the components. `content/stages.ts` has no framework imports, so both the Next.js app and the Node art pipeline read it. The art pipeline refuses to draw any geometry whose layer is not declared there.
@@ -72,7 +85,8 @@ Content and stage data are kept apart from the components. `content/stages.ts` h
 - `modelLayers`: an ordered list of `{ id, label, material }`. The ids are the group names the 3D scene should use: `site-base`, `setting-out-grid`, `ground-slab`, `courtyard-void`, `blockwork-inner-leaf`, `steel-goalpost-frames`, `roof-timbers`, `brick-outer-leaf`, `glazing`, `zinc-roof`, `oak-joinery`, `timber-soffits`, `interior-finishes` and `courtyard-planting`.
 - `materials`: a label and colour for each material key.
 - `assemblyProgress`: 0 to 1, for scrubbing a GSAP timeline.
-- `illustration`: the 2D drawing, which stays as the fallback when WebGL is unavailable.
+- `illustration` and `plate`: the 2D drawings (paper and graphite), which stay as the fallback when WebGL is unavailable.
+- `markers`: drawing anchor ids in the same order as `added`.
 
 `scripts/art/model.mjs` already describes the full geometry in metres, layer by layer (x east, y up, z south), and can be ported to React Three Fiber meshes.
 

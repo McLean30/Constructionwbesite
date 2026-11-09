@@ -29,6 +29,8 @@ export const PAL = {
   void: "#2d3330",
 };
 
+export const GRAPHITE = { bg: "#262a27", ink: "#e6e1d4", base: "#353a36", void: "#2e332f" };
+
 const layerStage = {};
 for (const s of stages) for (const l of s.modelLayers) layerStage[l.id] = s.id;
 const order = { foundations: 1, structure: 2, envelope: 3, finish: 4 };
@@ -64,7 +66,11 @@ export const LINK = { x0: 6.5, x1: 13.5, z0: 0, z1: DIM.LINK_Z };
  * @param {"drawing"|"scene"} o.mode  drawing = paper axonometric, scene = illustrated view
  * @param {number} o.brickSpacing  spacing of coursing lines (m)
  */
-export function buildModel({ stage = "finish", highlight = null, only = null, offset = [0, 0, 0], mode = "drawing", brickSpacing = 0.225 } = {}) {
+export function buildModel({ stage = "finish", highlight = null, only = null, offset = [0, 0, 0], mode = "drawing", brickSpacing = 0.225, theme = "paper" } = {}) {
+  // "graphite" draws light linework on a dark plate; "paper" is the default drawing
+  const dark = theme === "graphite";
+  const INK = dark ? GRAPHITE.ink : PAL.ink;
+  const BG = dark ? GRAPHITE.bg : PAL.paper;
   const { SL, EAVE, RIDGE, BEAM, OH_E, OH_G, OH_S, I, T } = DIM;
   const solids = [];
   const ground = [];
@@ -72,7 +78,7 @@ export function buildModel({ stage = "finish", highlight = null, only = null, of
   const anchors = [];
   const overlays = [];
   const drawing = mode === "drawing";
-  const col = (c) => (drawing ? E.mix(c, PAL.paper, 0.18) : c);
+  const col = (c) => (drawing ? (dark ? E.mix(c === PAL.zinc ? "#50565a" : c, "#7d8380", 0.12) : E.mix(c, BG, 0.18)) : c);
 
   for (const s of stages) for (const l of s.modelLayers) if (!layerStage[l.id]) throw new Error("bad layer");
   const has = (layer) => {
@@ -94,8 +100,13 @@ export function buildModel({ stage = "finish", highlight = null, only = null, of
   const put = (layer, s, { isGround = false } = {}) => {
     if (!has(layer)) return null;
     s.layer = layer;
-    if (isHl(layer))
-      for (const f of s.faces) if (f.stroke !== null || f.hlAlways) Object.assign(f, hlStyle, { strokeWidth: (f.strokeWidth ?? 1) < 1 ? 1 : hlStyle.strokeWidth });
+    if (isHl(layer)) {
+      const tint = drawing && !["site-base", "courtyard-void"].includes(layer);
+      for (const f of s.faces) {
+        if (f.stroke !== null || f.hlAlways) Object.assign(f, hlStyle, { strokeWidth: (f.strokeWidth ?? 1) < 1 ? 1 : hlStyle.strokeWidth });
+        if (tint && f.fill && !f.fill.startsWith("url")) f.fill = E.mix(f.fill, PAL.orange, dark ? 0.42 : 0.3);
+      }
+    }
     translate(s);
     (isGround ? ground : solids).push(s);
     return s;
@@ -133,16 +144,16 @@ export function buildModel({ stage = "finish", highlight = null, only = null, of
     return s;
   };
   const glassFill = drawing ? "#c4d2d3" : "url(#glass)";
-  const glassStyle = (extra = {}) => ({ fill: glassFill, opacity: drawing ? 0.75 : 0.9, stroke: PAL.ink, strokeOpacity: 0.6, strokeWidth: 0.8, ...extra });
+  const glassStyle = (extra = {}) => ({ fill: glassFill, opacity: drawing ? 0.75 : 0.9, stroke: INK, strokeOpacity: 0.6, strokeWidth: 0.8, ...extra });
 
   // ---------------- site base (drawing only) ----------------
   if (drawing && has("site-base")) {
-    const base = E.box(-5, -0.8, -5, 25, 0, 22.5, { fill: "#e3ded1", flat: false, castShadow: false });
+    const base = E.box(-5, -0.8, -5, 25, 0, 22.5, { fill: dark ? GRAPHITE.base : "#e3ded1", flat: false, castShadow: false });
     const top = E.face(base, [0, 1, 0]);
     if (has("setting-out-grid")) {
       const gx = [0, 6.5, 13.5, 20];
       const gz = [0, 4.5, 14, 17];
-      const gridStyle = { stroke: isHl("setting-out-grid") ? PAL.orange : PAL.ink, strokeOpacity: 0.7, strokeWidth: 0.7, dash: "6 5" };
+      const gridStyle = { stroke: isHl("setting-out-grid") ? PAL.orange : INK, strokeOpacity: 0.7, strokeWidth: 0.7, dash: "6 5" };
       for (const x of gx) top.details.push({ type: "line", pts: [[x, 0.01, -3.6], [x, 0.01, 20.6]], ...gridStyle });
       for (const z of gz) top.details.push({ type: "line", pts: [[-3.6, 0.01, z], [23.6, 0.01, z]], ...gridStyle });
       const labels = [
@@ -153,9 +164,9 @@ export function buildModel({ stage = "finish", highlight = null, only = null, of
         labels
           .map(({ p, t }) => {
             const [x, y] = E.project(cam, E.add(p, offset));
-            return `<g><ellipse cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" rx="13" ry="13" fill="${PAL.paper}" stroke="${gridStyle.stroke}" stroke-width="1.2"/><text x="${x.toFixed(
+            return `<g><ellipse cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" rx="13" ry="13" fill="${BG}" stroke="${gridStyle.stroke}" stroke-width="1.2"/><text x="${x.toFixed(
               1,
-            )}" y="${(y + 5).toFixed(1)}" text-anchor="middle" font-family="'Barlow Condensed','Arial Narrow',Arial,sans-serif" font-size="15" font-weight="600" fill="${PAL.ink}">${t}</text></g>`;
+            )}" y="${(y + 5).toFixed(1)}" text-anchor="middle" font-family="'Barlow Condensed','Arial Narrow',Arial,sans-serif" font-size="15" font-weight="600" fill="${INK}">${t}</text></g>`;
           })
           .join(""),
       );
@@ -179,9 +190,9 @@ export function buildModel({ stage = "finish", highlight = null, only = null, of
         [LINK.x1, 0.02, 17],
         [LINK.x0, 0.02, 17],
       ],
-      { fill: drawing ? "#ebe6da" : "#b9bfa0", flat: true, stroke: isHl("courtyard-void") ? PAL.orange : PAL.ink, dash: "7 5", strokeWidth: 1.2, hlAlways: true },
+      { fill: drawing ? (dark ? GRAPHITE.void : "#ebe6da") : "#b9bfa0", flat: true, stroke: isHl("courtyard-void") ? PAL.orange : INK, dash: "7 5", strokeWidth: 1.2, hlAlways: true },
     );
-    if (drawing) v.faces[0].details.push(...E.hatch(v.faces[0], { drop: "y", scan: "x", spacing: 0.7, offset: 0.35, style: { stroke: PAL.ink, strokeOpacity: 0.18, strokeWidth: 0.6 } }));
+    if (drawing) v.faces[0].details.push(...E.hatch(v.faces[0], { drop: "y", scan: "x", spacing: 0.7, offset: 0.35, style: { stroke: INK, strokeOpacity: 0.18, strokeWidth: 0.6 } }));
     put("courtyard-void", v, { isGround: true });
     anchor("courtyard-void", "void", "Courtyard void", [10, 0, 11]);
   }
@@ -272,10 +283,10 @@ export function buildModel({ stage = "finish", highlight = null, only = null, of
         );
       }
     }
-    if (w.id === "east") anchor("roof-timbers", "rafters", "Ridge beam and rafters", [x1 - 1.4, u(x1 - 1.4) + 0.2, 7]);
+    if (w.id === "west") anchor("roof-timbers", "rafters", "Ridge beam and rafters", [x1 - 1.6, u(x1 - 1.6) + 0.2, 6]);
 
     // --- envelope: brick outer leaf ---
-    const brick = { fill: PAL.brick };
+    const brick = { fill: col(PAL.brick) };
     const outerLong = brickLines(E.box(Math.min(otherX, otherX - yardDir * 0.1), SL, z0, Math.max(otherX, otherX - yardDir * 0.1), EAVE, z1, brick));
     put("brick-outer-leaf", outerLong);
     const yardLong = brickLines(E.box(Math.min(yardX, yardX - yardDir * 0.1), SL, zStartYard, Math.max(yardX, yardX - yardDir * 0.1), EAVE, z1, brick));
@@ -283,9 +294,9 @@ export function buildModel({ stage = "finish", highlight = null, only = null, of
       const fc = E.face(yardLong, [yardDir, 0, 0]);
       const fin = has("oak-joinery");
       for (const [za, zb] of w.openings) {
-        E.decal(fc, E.rectOn("x", yardX, za, zb, SL, 2.5, yardDir), glassStyle({ stroke: fin ? PAL.oak : PAL.ink, strokeWidth: fin ? 2.4 : 0.8, strokeOpacity: 1 }));
+        E.decal(fc, E.rectOn("x", yardX, za, zb, SL, 2.5, yardDir), glassStyle({ stroke: fin ? PAL.oak : INK, strokeWidth: fin ? 2.4 : 0.8, strokeOpacity: 1 }));
         const mid = (za + zb) / 2;
-        fc.details.push({ type: "line", pts: [[yardX + yardDir * 0.012, SL, mid], [yardX + yardDir * 0.012, 2.5, mid]], stroke: fin ? PAL.oak : PAL.ink, strokeWidth: fin ? 2 : 0.7, strokeOpacity: 1 });
+        fc.details.push({ type: "line", pts: [[yardX + yardDir * 0.012, SL, mid], [yardX + yardDir * 0.012, 2.5, mid]], stroke: fin ? PAL.oak : INK, strokeWidth: fin ? 2 : 0.7, strokeOpacity: 1 });
       }
     }
     put("brick-outer-leaf", yardLong);
@@ -306,7 +317,7 @@ export function buildModel({ stage = "finish", highlight = null, only = null, of
     if (w.slot && has("brick-outer-leaf")) {
       const fc = E.face(streetGable, [0, 0, -1]);
       const [a, b] = w.slot;
-      E.decal(fc, E.rectOn("z", z0, x0 + a, x0 + b, 0.9, 2.7, -1), glassStyle({ stroke: has("oak-joinery") ? PAL.oak : PAL.ink, strokeWidth: has("oak-joinery") ? 2 : 0.8 }));
+      E.decal(fc, E.rectOn("z", z0, x0 + a, x0 + b, 0.9, 2.7, -1), glassStyle({ stroke: has("oak-joinery") ? PAL.oak : INK, strokeWidth: has("oak-joinery") ? 2 : 0.8 }));
     }
     put("brick-outer-leaf", streetGable);
     put(
@@ -340,7 +351,7 @@ export function buildModel({ stage = "finish", highlight = null, only = null, of
     );
     if (!has("oak-joinery")) {
       const wdt = x1 - x0 - 0.2;
-      for (let k = 1; k < 4; k++) screen.faces[0].details.push({ type: "line", pts: [[x0 + 0.1 + (wdt * k) / 4, SL, gz + 0.01], [x0 + 0.1 + (wdt * k) / 4, BEAM, gz + 0.01]], stroke: PAL.ink, strokeWidth: 0.9, strokeOpacity: 0.8 });
+      for (let k = 1; k < 4; k++) screen.faces[0].details.push({ type: "line", pts: [[x0 + 0.1 + (wdt * k) / 4, SL, gz + 0.01], [x0 + 0.1 + (wdt * k) / 4, BEAM, gz + 0.01]], stroke: INK, strokeWidth: 0.9, strokeOpacity: 0.8 });
     }
     screen.faces[0].bias = -0.02;
     put("glazing", screen);
@@ -357,7 +368,7 @@ export function buildModel({ stage = "finish", highlight = null, only = null, of
       [x0 - OH_E, ye + 0.12, 0],
     ].map(([x, y]) => [x, y, z0 - OH_S]);
     const roof = E.extrude(roofProfile, [0, 0, z1 + OH_G - (z0 - OH_S)], {
-      fill: PAL.zinc,
+      fill: col(PAL.zinc),
       bias: drawing ? -1.5 : -1,
       faceStyle: (f) => {
         const n = E.newell(f.pts);
@@ -443,12 +454,12 @@ export function buildModel({ stage = "finish", highlight = null, only = null, of
     if (has("brick-outer-leaf")) {
       const fc = E.face(north, [0, 0, -1]);
       const fin = has("oak-joinery");
-      E.decal(fc, E.rectOn("z", z0, 8.6, 10.1, SL, 2.45, -1), { fill: fin ? PAL.oak : PAL.void, opacity: 1, stroke: PAL.ink, strokeWidth: 0.9 });
+      E.decal(fc, E.rectOn("z", z0, 8.6, 10.1, SL, 2.45, -1), { fill: fin ? PAL.oak : PAL.void, opacity: 1, stroke: INK, strokeWidth: 0.9 });
       if (fin) {
         for (let x = 8.8; x < 10.0; x += 0.18) fc.details.push({ type: "line", pts: [[x, SL + 0.1, z0 - 0.012], [x, 2.35, z0 - 0.012]], stroke: "#6f5233", strokeWidth: 0.6, strokeOpacity: 0.6 });
-        fc.details.push({ type: "line", pts: [[9.9, 1.0, z0 - 0.015], [9.9, 1.4, z0 - 0.015]], stroke: PAL.ink, strokeWidth: 1.6, strokeOpacity: 1 });
+        fc.details.push({ type: "line", pts: [[9.9, 1.0, z0 - 0.015], [9.9, 1.4, z0 - 0.015]], stroke: INK, strokeWidth: 1.6, strokeOpacity: 1 });
       }
-      E.decal(fc, E.rectOn("z", z0, 10.6, 12.9, 1.75, 2.45, -1), glassStyle({ stroke: fin ? PAL.oak : PAL.ink, strokeWidth: fin ? 2 : 0.8 }));
+      E.decal(fc, E.rectOn("z", z0, 10.6, 12.9, 1.75, 2.45, -1), glassStyle({ stroke: fin ? PAL.oak : INK, strokeWidth: fin ? 2 : 0.8 }));
     }
     put("brick-outer-leaf", north);
     anchor("brick-outer-leaf", "entrance", "Entrance in the link", [9.35, 1.3, z0]);
@@ -465,7 +476,7 @@ export function buildModel({ stage = "finish", highlight = null, only = null, of
     put("glazing", screen);
     for (let x = x0; x <= x1 + 0.01; x += (x1 - x0) / 5) put("oak-joinery", E.box(x - 0.05, SL, z1 - 0.08, x + 0.05, 2.75, z1, { fill: PAL.oak }));
 
-    const lroof = E.box(x0, EAVE + 0.18, z0 - 0.15, x1, EAVE + 0.32, z1 + 0.15, { fill: PAL.zinc, bias: drawing ? -1.5 : -0.3 });
+    const lroof = E.box(x0, EAVE + 0.18, z0 - 0.15, x1, EAVE + 0.32, z1 + 0.15, { fill: col(PAL.zinc), bias: drawing ? -1.5 : -0.3 });
     if (has("zinc-roof")) {
       const top = E.face(lroof, [0, 1, 0]);
       top.details.push(...E.hatch(top, { drop: "y", scan: "x", spacing: 0.5, offset: 0.25, style: { stroke: "#8b9194", strokeOpacity: 0.5, strokeWidth: 0.7 } }));
@@ -482,7 +493,7 @@ export function buildModel({ stage = "finish", highlight = null, only = null, of
         [x1, 0.04, z1],
         [x0, 0.04, z1],
       ],
-      { fill: PAL.stone, flat: !drawing, stroke: PAL.ink, strokeOpacity: 0.35, strokeWidth: 0.6 },
+      { fill: PAL.stone, flat: !drawing, stroke: INK, strokeOpacity: 0.35, strokeWidth: 0.6 },
     );
     const st = { stroke: "#8e8471", strokeOpacity: 0.45, strokeWidth: 0.5 };
     p.faces[0].details.push(...E.hatch(p.faces[0], { drop: "y", scan: "x", spacing, offset: x0, style: st }));

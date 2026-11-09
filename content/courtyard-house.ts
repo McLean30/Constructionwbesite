@@ -4,6 +4,12 @@ import street from "@/public/images/courtyard-house-street.webp";
 import interior from "@/public/images/courtyard-house-interior.webp";
 import detail from "@/public/images/courtyard-house-detail.webp";
 import construction from "@/public/images/courtyard-house-construction.webp";
+import visualisation from "@/public/images/courtyard-house-visualisation.webp";
+import visualisationPhone from "@/public/images/courtyard-house-visualisation-phone.webp";
+import soffitDetail from "@/public/images/courtyard-house-visualisation-soffit.webp";
+import brickDetail from "@/public/images/courtyard-house-material-brick.webp";
+import zincDetail from "@/public/images/courtyard-house-material-zinc.webp";
+import oakDetail from "@/public/images/courtyard-house-material-oak.webp";
 import annotations from "@/content/generated/annotations.json";
 
 export interface Annotation {
@@ -50,7 +56,7 @@ export const courtyardHouse = {
   layout: {
     heading: "The courtyard layout",
     paragraphs: [
-      "Two parallel wings run back from the street. The west wing holds the living room and a quiet sitting room; the east wing holds the kitchen and dining space; bedrooms sit at the street end of both. A low entrance link joins them along the pavement, so the front door is set into a single calm brick wall.",
+      "Two parallel wings run back from the street. The west wing holds the bedrooms and a quiet sitting room; the east wing holds the kitchen, dining space and a small library. A low link joins them: its street side is a single calm brick wall with the front door, and its courtyard side is the glazed living room, with a fire, under a timber-lined soffit.",
       "The courtyard sits between the wings: enclosed on three sides, open to the garden on the fourth. Every main room has a window or glazed door onto it, so the courtyard becomes the centre of the house and the way you move around it.",
     ],
     points: [
@@ -64,16 +70,22 @@ export const courtyardHouse = {
       id: "brick",
       title: "Pale buff brick",
       text: "A pale brick catches the soft, grey daylight of the west of Scotland and holds it. It echoes the blond sandstone of older Glasgow villas without imitating it, and it lets the street elevation be quiet and solid without feeling heavy.",
+      image: brickDetail,
+      alt: "Close view of pale buff brickwork with varied, slightly weathered faces beside a dark window frame.",
     },
     {
       id: "zinc",
       title: "Dark standing-seam zinc",
       text: "Zinc suits a low roof pitch and can be folded cleanly over the deep garden overhang, so the roof reads as one thin, dark lid. The standing seams run down the slope and give the roof a fine texture against the brick.",
+      image: zincDetail,
+      alt: "Dark standing-seam zinc roof, wet with rain, with seams running down the slope to a slim eaves edge above buff brick.",
     },
     {
       id: "oak",
       title: "Oak joinery",
       text: "Oak is used wherever people touch or look closely: the entrance door, window and door frames, and the soffit boards under the overhang. The same timber runs from the living room ceiling to the terrace, joining inside and outside.",
+      image: oakDetail,
+      alt: "Oak soffit boards with small downlights above vertical timber boarding, meeting a buff brick wall.",
     },
   ],
 };
@@ -90,7 +102,7 @@ export const gallery: GalleryItem[] = [
     caption: "Concept illustration. Wide view of the garden elevation in soft daylight, showing both wings and the courtyard between them.",
     notice:
       "Notice how the two gable ends are almost entirely glass below the brick, while the deep overhangs and timber soffits cut glare and keep rain off the terrace. The courtyard stays visible right through the middle of the house.",
-    annotations: a.hero,
+    annotations: [],
     layout: "wide",
   },
   {
@@ -110,8 +122,8 @@ export const gallery: GalleryItem[] = [
     number: "03",
     title: "Living space",
     image: interior,
-    alt: "Interior illustration: a living room with an oak floor and exposed timber rafters, a person on a sofa looking out through a large oak-framed window into the sheltered courtyard, where someone sits on a bench beneath a multi-stem tree.",
-    caption: "Concept illustration. From the living space in the west wing, looking across the courtyard to the kitchen wing.",
+    alt: "Interior illustration: a sitting room with an oak floor and exposed timber rafters, a person on a sofa looking out through a large oak-framed window into the sheltered courtyard, where someone sits on a bench beneath a multi-stem tree.",
+    caption: "Concept illustration. From the sitting room in the west wing, looking across the courtyard to the kitchen wing.",
     notice:
       "The courtyard works like an extra room. You look across it to the brick of the other wing, so the view is green and private rather than open to the neighbours. The garden-side glazing on the right brings in a second source of daylight.",
     annotations: [],
@@ -144,4 +156,19 @@ export const gallery: GalleryItem[] = [
 ];
 
 export const heroImage = gallery[0];
+
+/** Supplied AI-generated concept visualisation (see ASSETS.md) and its art-directed crops. */
+export const visualisationImage = {
+  image: visualisation,
+  phone: visualisationPhone,
+  alt: "Concept visualisation of the Courtyard House courtyard at dusk after rain: two buff-brick wings with dark standing-seam zinc roofs frame wet sandstone paving, birch trees and planting, leading to a glazed living room with a lit fire beneath a timber-lined soffit, with hills beyond.",
+  caption: "Concept visualisation",
+  description: "Across the courtyard to the glazed living room in the entrance link.",
+};
+
+export const soffitImage = {
+  image: soffitDetail,
+  alt: "Detail of the east wing: the dark zinc roof edge turns down over oak soffit boards with small downlights, above a buff brick pier and a tall glazed opening.",
+  caption: "Detail from the concept visualisation. The zinc roof edge folds over the oak-lined soffit, which oversails the buff brick and the glazing below.",
+};
 export const projects = { [courtyardHouse.slug]: courtyardHouse };

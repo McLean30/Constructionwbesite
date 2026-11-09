@@ -11,7 +11,7 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 import sharp from "sharp";
 import * as E from "./engine.mjs";
-import { buildModel, boundsPoints, PAL } from "./model.mjs";
+import { buildModel, boundsPoints, PAL, GRAPHITE } from "./model.mjs";
 import { interiorSvg, detailSvg } from "./views2d.mjs";
 import { stages } from "../../content/stages.ts";
 
@@ -46,22 +46,32 @@ const paperDefs = `<pattern id="grain" width="6" height="6" patternUnits="userSp
 const AXO_DIR = [1, 1.15, 1.35];
 const AXO_LIGHT = [-0.45, 0.85, 0.55];
 
-function stageDrawing(stageId) {
-  const cam = E.fitOrtho(E.orthographic({ dir: AXO_DIR, width: 1600, height: 1100 }), boundsPoints(), 70);
-  const m = buildModel({ stage: stageId, highlight: stageId, mode: "drawing" });
+function stageDrawing(stageId, theme = "paper") {
+  const dark = theme === "graphite";
+  const H = dark ? 920 : 1100;
+  // the plate is framed on the site base; the courtyard tree stays well inside it
+  const plateBounds = boundsPoints().map(([x, y, z]) => [x, Math.min(y, 2.5), z]);
+  const cam = E.fitOrtho(E.orthographic({ dir: AXO_DIR, width: 1600, height: H }), dark ? plateBounds : boundsPoints(), dark ? 34 : 70);
+  const m = buildModel({ stage: stageId, highlight: stageId, mode: "drawing", theme });
+  // drafting-board grid behind the graphite plate
+  let grid = "";
+  if (dark) for (let x = 40; x < 1600; x += 40) for (let y = 40; y < H; y += 40) grid += `M${x - 3} ${y}h6M${x} ${y - 3}v6`;
   const svg = E.render(cam, {
     solids: m.solids,
     groundSolids: m.ground,
     sprites: m.sprites,
     light: AXO_LIGHT,
-    ambient: 0.78,
-    diffuse: 0.26,
+    ambient: dark ? 0.84 : 0.78,
+    diffuse: dark ? 0.22 : 0.26,
+    edge: dark ? GRAPHITE.ink : PAL.ink,
+    edgeOpacity: dark ? 0.62 : 0.75,
     edgeWidth: 1,
-    shadow: { opacity: 0.1, groundY: 0 },
-    background: `<rect width="1600" height="1100" fill="${PAL.paper}"/>`,
+    shadow: { opacity: dark ? 0.28 : 0.1, groundY: 0, colour: dark ? "#0d0f0e" : PAL.ink },
+    background: `<rect width="1600" height="${H}" fill="${dark ? GRAPHITE.bg : PAL.paper}"/>${dark ? `<path d="${grid}" stroke="#3a3f3b" stroke-width="1"/>` : ""}`,
     overlay: m.overlays.map((o) => o(cam)).join(""),
   });
-  recordAnchors(`stage-${stageId}`, cam, m.anchors, (a) => a.stage === stageId && a.id !== "entrance");
+  if (!dark) recordAnchors(`stage-${stageId}`, cam, m.anchors, (a) => a.stage === stageId && a.id !== "entrance");
+  else recordAnchors(`plate-${stageId}`, cam, m.anchors, (a) => a.stage === stageId && a.id !== "entrance");
   return svg;
 }
 
@@ -257,7 +267,10 @@ async function raster(name, svg, width) {
     .toFile(out("public/images", `${name}.webp`));
 }
 
-for (const s of stages) fs.writeFileSync(out("public/stages", `${s.id}.svg`), stageDrawing(s.id));
+for (const s of stages) {
+  fs.writeFileSync(out("public/stages", `${s.id}.svg`), stageDrawing(s.id));
+  fs.writeFileSync(out("public/stages", `plate-${s.id}.svg`), stageDrawing(s.id, "graphite"));
+}
 await raster("courtyard-house-garden", hero(), 2400);
 await raster("courtyard-house-street", street(), 1800);
 await raster("courtyard-house-construction", exploded(), 1600);
