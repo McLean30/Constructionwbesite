@@ -146,7 +146,7 @@ export const gallery: GalleryItem[] = [
     number: "05",
     title: "How it fits together",
     image: construction,
-    alt: "Exploded axonometric drawing of the Courtyard House in four tiers: concrete slabs on the site, blockwork walls with orange steel frames and timber rafters, brick walls with glazing and zinc roofs, and finally oak joinery, soffits, paving, planting and people.",
+    alt: "Exploded axonometric drawing of the Courtyard House in four tiers: concrete slabs on the site, blockwork walls with grey steel frames and timber rafters, brick walls with glazing and zinc roofs, and finally oak joinery, soffits, paving, planting and people.",
     caption: "Original drawing. Exploded axonometric of the four construction stages, stacked in the order they are built.",
     notice:
       "Read it from the bottom up. Each tier is one stage of the build, drawn from the same viewpoint so you can trace a wall from its slab, through its structure and brick, to the finished room.",
@@ -172,3 +172,73 @@ export const soffitImage = {
   caption: "Detail from the concept visualisation. The zinc roof edge folds over the oak-lined soffit, which oversails the buff brick and the glazing below.",
 };
 export const projects = { [courtyardHouse.slug]: courtyardHouse };
+
+/** What kind of image this is: shown on every gallery tile and in the enlarged view. */
+export type ImageKind = "Concept visualisation · AI-generated" | "Detail crop · AI-generated visualisation" | "Concept illustration" | "Construction drawing";
+
+export interface GalleryView {
+  id: string;
+  kind: ImageKind;
+  title: string;
+  /** One short line: what this view adds to what the visitor has already seen. */
+  caption: string;
+  image: StaticImageData;
+  alt: string;
+}
+
+const byId = (id: string) => gallery.find((g) => g.id === id)!;
+
+/**
+ * The Courtyard House gallery, in the order a visitor learns the house: the courtyard first,
+ * then how it meets the street, how it feels inside, what it is made of and how it is built.
+ */
+export const courtyardGallery: GalleryView[] = [
+  {
+    id: "courtyard",
+    kind: "Concept visualisation · AI-generated",
+    title: "The courtyard",
+    caption: "The heart of the plan: a sheltered outdoor room between two brick wings.",
+    image: visualisation,
+    alt: visualisationImage.alt,
+  },
+  {
+    id: "street",
+    kind: "Concept illustration",
+    title: "The street approach",
+    caption: "A quiet brick face to the pavement, with the front door set into the low link.",
+    image: byId("street").image,
+    alt: byId("street").alt,
+  },
+  {
+    id: "interior",
+    kind: "Concept illustration",
+    title: "From the sitting room",
+    caption: "Inside, the courtyard becomes the view: green, private and close.",
+    image: byId("interior").image,
+    alt: byId("interior").alt,
+  },
+  {
+    id: "material",
+    kind: "Detail crop · AI-generated visualisation",
+    title: "Zinc meets oak",
+    caption: "The dark zinc roof edge folds over an oak-lined soffit above the buff brick.",
+    image: soffitDetail,
+    alt: "Detail of the east wing: the dark zinc roof edge turns down over oak soffit boards with small downlights, above a buff brick pier and a tall glazed opening.",
+  },
+  {
+    id: "junction",
+    kind: "Construction drawing",
+    title: "How that junction is built",
+    caption: "Section through the overhang: zinc, oak soffit, insulated cavity and steel beam.",
+    image: byId("detail").image,
+    alt: byId("detail").alt,
+  },
+  {
+    id: "assembly",
+    kind: "Construction drawing",
+    title: "How the house fits together",
+    caption: "The four build stages, stacked in the order they go up on site.",
+    image: byId("construction").image,
+    alt: byId("construction").alt,
+  },
+];

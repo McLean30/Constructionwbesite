@@ -24,8 +24,12 @@ export function SiteHeader() {
       }
     };
     document.addEventListener("keydown", onKey);
-    panelRef.current?.querySelector<HTMLElement>("a")?.focus();
-    return () => document.removeEventListener("keydown", onKey);
+    // wait a frame so the panel is visible before moving focus into it
+    const raf = requestAnimationFrame(() => panelRef.current?.querySelector<HTMLElement>("a")?.focus());
+    return () => {
+      cancelAnimationFrame(raf);
+      document.removeEventListener("keydown", onKey);
+    };
   }, [open]);
 
   return (
@@ -66,7 +70,8 @@ export function SiteHeader() {
         </button>
       </div>
 
-      <div id={menuId} ref={panelRef} className="mobile-menu" hidden={!open}>
+      {/* always mounted so it can animate; visibility + inert keep it out of reach when closed */}
+      <div id={menuId} ref={panelRef} className={`mobile-menu ${open ? "is-open" : ""}`} inert={!open} aria-hidden={!open}>
         <nav aria-label="Main, mobile">
           <ul>
             {nav.map((item, i) => (

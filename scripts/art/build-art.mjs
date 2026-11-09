@@ -237,13 +237,13 @@ function exploded() {
   for (const [x, z] of corners) {
     const a = E.project(cam, [x, 0.2, z]);
     const b = E.project(cam, [x, tiers.finish + 0.2, z]);
-    guides += `<path d="M${a[0].toFixed(1)} ${a[1].toFixed(1)}L${b[0].toFixed(1)} ${b[1].toFixed(1)}" stroke="${PAL.orange}" stroke-width="1.2" stroke-dasharray="4 6" opacity="0.8"/>`;
+    guides += `<path d="M${a[0].toFixed(1)} ${a[1].toFixed(1)}L${b[0].toFixed(1)} ${b[1].toFixed(1)}" stroke="${PAL.goldDeep}" stroke-width="1.2" stroke-dasharray="4 6" opacity="0.8"/>`;
   }
   let labels = "";
   stages.forEach((s) => {
     const c = E.project(cam, [10, tiers[s.id] + 1.5, 9]);
     const p = [1600 - 300, c[1]];
-    labels += `<g font-family="'Barlow Condensed','Arial Narrow',Arial,sans-serif" fill="${PAL.ink}"><path d="M${(p[0] - 70).toFixed(1)} ${p[1].toFixed(1)}H${(p[0] + 8).toFixed(1)}" stroke="${PAL.orange}" stroke-width="2"/><text x="${(p[0] + 18).toFixed(1)}" y="${(p[1] + 6).toFixed(1)}" font-size="30" font-weight="600">0${s.number}</text><text x="${(p[0] + 18).toFixed(1)}" y="${(p[1] + 34).toFixed(1)}" font-size="22" letter-spacing="1.5">${s.title.toUpperCase()}</text></g>`;
+    labels += `<g font-family="'Barlow Condensed','Arial Narrow',Arial,sans-serif" fill="${PAL.ink}"><path d="M${(p[0] - 70).toFixed(1)} ${p[1].toFixed(1)}H${(p[0] + 8).toFixed(1)}" stroke="${PAL.goldDeep}" stroke-width="2"/><text x="${(p[0] + 18).toFixed(1)}" y="${(p[1] + 6).toFixed(1)}" font-size="30" font-weight="600">0${s.number}</text><text x="${(p[0] + 18).toFixed(1)}" y="${(p[1] + 34).toFixed(1)}" font-size="22" letter-spacing="1.5">${s.title.toUpperCase()}</text></g>`;
   });
   const svg = E.render(cam, {
     solids: m.solids,

@@ -11,10 +11,11 @@ import * as E from "./engine.mjs";
 export const PAL = {
   paper: "#f4f1e9",
   ink: "#202421",
-  orange: "#ff6534",
+  gold: "#c6a365", // highlight on graphite plates
+  goldDeep: "#8a6a2e", // highlight on paper drawings (thin lines keep contrast)
   concrete: "#bdbab2",
   block: "#c9c7c0",
-  steel: "#ff6534",
+  steel: "#5b6166", // painted steel, dark grey
   softwood: "#d8c29a",
   brick: "#d9c6a0",
   brickLine: "#8f7b5a",
@@ -29,7 +30,7 @@ export const PAL = {
   void: "#2d3330",
 };
 
-export const GRAPHITE = { bg: "#262a27", ink: "#e6e1d4", base: "#353a36", void: "#2e332f" };
+export const GRAPHITE = { bg: "#222421", ink: "#e6e1d4", base: "#353a36", void: "#2e332f" };
 
 const layerStage = {};
 for (const s of stages) for (const l of s.modelLayers) layerStage[l.id] = s.id;
@@ -60,7 +61,7 @@ export const LINK = { x0: 6.5, x1: 13.5, z0: 0, z1: DIM.LINK_Z };
  * Build the model.
  * @param {object} o
  * @param {"foundations"|"structure"|"envelope"|"finish"} o.stage  include layers up to this stage
- * @param {string|null} o.highlight  stage whose objects are outlined in safety orange
+ * @param {string|null} o.highlight  stage whose objects are outlined in gold
  * @param {string|null} o.only  include only this stage (exploded view)
  * @param {number[]} o.offset  translation applied to everything (exploded view)
  * @param {"drawing"|"scene"} o.mode  drawing = paper axonometric, scene = illustrated view
@@ -89,7 +90,8 @@ export function buildModel({ stage = "finish", highlight = null, only = null, of
     return only ? st === only : order[st] <= order[stage];
   };
   const isHl = (layer) => highlight && layerStage[layer] === highlight;
-  const hlStyle = { stroke: PAL.orange, strokeWidth: 1.7, strokeOpacity: 1 };
+  const ACC = dark ? PAL.gold : PAL.goldDeep;
+  const hlStyle = { stroke: ACC, strokeWidth: 1.7, strokeOpacity: 1 };
 
   const translate = (s) => {
     if (offset.every((v) => v === 0)) return s;
@@ -106,7 +108,7 @@ export function buildModel({ stage = "finish", highlight = null, only = null, of
       const tint = drawing && !["site-base", "courtyard-void"].includes(layer);
       for (const f of s.faces) {
         if (f.stroke !== null || f.hlAlways) Object.assign(f, hlStyle, { strokeWidth: (f.strokeWidth ?? 1) < 1 ? 1 : hlStyle.strokeWidth });
-        if (tint && f.fill && !f.fill.startsWith("url")) f.fill = E.mix(f.fill, PAL.orange, dark ? 0.42 : 0.3);
+        if (tint && f.fill && !f.fill.startsWith("url")) f.fill = E.mix(f.fill, ACC, dark ? 0.5 : 0.32);
       }
     }
     translate(s);
@@ -115,7 +117,7 @@ export function buildModel({ stage = "finish", highlight = null, only = null, of
   };
   const sprite = (layer, factory, at, opts) => {
     if (!has(layer)) return;
-    const sp = factory(E.add(at, offset), { ...opts, highlight: isHl(layer) ? PAL.orange : undefined });
+    const sp = factory(E.add(at, offset), { ...opts, highlight: isHl(layer) ? ACC : undefined });
     sp.layer = layer;
     sp.meta = { kind: factory === E.tree ? "tree" : "person", at: E.add(at, offset), ...opts };
     sprites.push(sp);
@@ -158,7 +160,7 @@ export function buildModel({ stage = "finish", highlight = null, only = null, of
     if (has("setting-out-grid")) {
       const gx = [0, 6.5, 13.5, 20];
       const gz = [0, 4.5, 14, 17];
-      const gridStyle = { stroke: isHl("setting-out-grid") ? PAL.orange : INK, strokeOpacity: 0.7, strokeWidth: 0.7, dash: "6 5", layer: "setting-out-grid" };
+      const gridStyle = { stroke: isHl("setting-out-grid") ? ACC : INK, strokeOpacity: 0.7, strokeWidth: 0.7, dash: "6 5", layer: "setting-out-grid" };
       for (const x of gx) top.details.push({ type: "line", pts: [[x, 0.01, -3.6], [x, 0.01, 20.6]], ...gridStyle });
       for (const z of gz) top.details.push({ type: "line", pts: [[-3.6, 0.01, z], [23.6, 0.01, z]], ...gridStyle });
       const labels = [
@@ -195,7 +197,7 @@ export function buildModel({ stage = "finish", highlight = null, only = null, of
         [LINK.x1, 0.02, 17],
         [LINK.x0, 0.02, 17],
       ],
-      { fill: drawing ? (dark ? GRAPHITE.void : "#ebe6da") : "#b9bfa0", flat: true, stroke: isHl("courtyard-void") ? PAL.orange : INK, dash: "7 5", strokeWidth: 1.2, hlAlways: true },
+      { fill: drawing ? (dark ? GRAPHITE.void : "#ebe6da") : "#b9bfa0", flat: true, stroke: isHl("courtyard-void") ? ACC : INK, dash: "7 5", strokeWidth: 1.2, hlAlways: true },
     );
     if (drawing) v.faces[0].details.push(...E.hatch(v.faces[0], { drop: "y", scan: "x", spacing: 0.7, offset: 0.35, style: { stroke: INK, strokeOpacity: 0.18, strokeWidth: 0.6 } }));
     put("courtyard-void", v, { isGround: true });

@@ -15,8 +15,8 @@ export default async function EnquirePage({ searchParams }: { searchParams: Prom
   const context = match ? { slug: match.slug, title: match.title } : null;
 
   return (
-    <section className="section enquire enquire--page" aria-labelledby="enquire-page-title">
-      <div className="enquire__grid">
+    <section className="enquire enquire--page theme-light" aria-labelledby="enquire-page-title">
+      <div className="section enquire__grid">
         <header className="section__head enquire__intro">
           <p className="eyebrow">Discuss your project</p>
           <h1 id="enquire-page-title" className="display display--lg">

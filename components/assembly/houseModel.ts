@@ -73,7 +73,7 @@ export interface LayerHandle {
   stage: string;
   arrival: Arrival;
   group: THREE.Group;
-  /** Materials whose emissive is used for the orange highlight. */
+  /** Materials whose emissive is used for the gold highlight. */
   lit: THREE.MeshStandardMaterial[];
   /** Every material that fades with the layer, with its resting opacity. */
   fading: { m: THREE.Material & { opacity: number }; rest: number }[];
@@ -89,7 +89,8 @@ export interface House {
   dispose(): void;
 }
 
-export const SAFETY_ORANGE = new THREE.Color("#ff6534");
+/** Brushed gold: picks out the parts added at the current stage. */
+export const HIGHLIGHT_GOLD = new THREE.Color("#c6a365");
 
 /** Small deterministic random generator so trees look the same on every visit. */
 function seeded(seed: number) {
@@ -255,12 +256,12 @@ export function buildHouse(data: ModelData, { anisotropy = 1 }: { anisotropy?: n
     const ctx = c.getContext("2d")!;
     ctx.beginPath();
     ctx.arc(64, 64, 52, 0, Math.PI * 2);
-    ctx.fillStyle = "#ff6534";
+    ctx.fillStyle = "#c6a365";
     ctx.fill();
     ctx.lineWidth = 9;
-    ctx.strokeStyle = "#f1ede3";
+    ctx.strokeStyle = "#f1eee5";
     ctx.stroke();
-    ctx.fillStyle = "#202421";
+    ctx.fillStyle = "#121311";
     ctx.font = "700 64px 'Barlow Condensed', 'Arial Narrow', Arial, sans-serif";
     ctx.textAlign = "center";
     ctx.textBaseline = "middle";
@@ -325,8 +326,8 @@ export function applyLayer(h: LayerHandle) {
   }
   if (h.arrival !== "base") {
     for (const m of h.lit) {
-      m.emissive.copy(SAFETY_ORANGE);
-      m.emissiveIntensity = h.highlight * 0.85;
+      m.emissive.copy(HIGHLIGHT_GOLD);
+      m.emissiveIntensity = h.highlight * 0.95;
     }
   }
 }

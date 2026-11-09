@@ -30,7 +30,7 @@ export interface AssemblyProps {
   onError: (error: unknown) => void;
 }
 
-const BACKGROUND = "#262a27";
+const BACKGROUND = "#222421";
 const IN_DURATION = 1.15;
 const OUT_DURATION = 0.45;
 const HIGHLIGHT_HOLD = 1.5;
@@ -236,7 +236,7 @@ function Scene({ data, constrained, stageIndex, buildKey, paused, reducedMotion,
     tl.current?.kill();
     settle.current?.kill();
 
-    // first mount: match the illustration exactly (this stage built, its parts tinted orange)
+    // first mount: match the illustration exactly (this stage built, its parts tinted gold)
     if (built.current === -2) {
       for (const h of house.layers.values()) {
         h.progress = h.arrival === "base" || stageOf(h.id) <= target ? 1 : 0;
@@ -273,7 +273,7 @@ function Scene({ data, constrained, stageIndex, buildKey, paused, reducedMotion,
     built.current = target;
 
     if (reducedMotion) {
-      // switch immediately; the orange highlight appears and is removed without movement
+      // switch immediately; the gold highlight appears and is removed without movement
       for (const h of house.layers.values()) {
         if (h.arrival === "base") continue;
         h.progress = stageOf(h.id) <= target ? 1 : 0;

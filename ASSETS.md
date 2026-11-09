@@ -26,9 +26,9 @@ Derived files, all made by `npm run crops` (`scripts/art/crop-visualisation.mjs`
 
 | File | Crop (left, top, width × height) | Used for |
 | --- | --- | --- |
-| `public/images/courtyard-house-visualisation.webp` | full frame, copied byte for byte | Homepage hero (desktop) and project page opening |
+| `public/images/courtyard-house-visualisation.webp` | full frame, copied byte for byte | Homepage hero (desktop), project page opening and gallery view 1. The gold roofline over the hero is a separate SVG overlay traced on this image (see `scripts/art/roofline.md`); the image itself is unaltered |
 | `public/images/courtyard-house-visualisation-phone.webp` | 540, 0, 940 × 941 | Homepage hero on phones: courtyard and glazed living room |
-| `public/images/courtyard-house-visualisation-soffit.webp` | 1250, 150, 422 × 300 | Project sequence: zinc roof edge meeting the oak soffit |
+| `public/images/courtyard-house-visualisation-soffit.webp` | 1250, 150, 422 × 300 | Project sequence and gallery view 4: zinc roof edge meeting the oak soffit |
 | `public/images/courtyard-house-material-zinc.webp` | 90, 40, 520 × 300 | Material decision: zinc |
 | `public/images/courtyard-house-material-brick.webp` | 300, 340, 220 × 300 | Material decision: brick |
 | `public/images/courtyard-house-material-oak.webp` | 1262, 300, 180 × 300 | Material decision: oak |
@@ -61,3 +61,26 @@ All illustrations are labelled on the site as "concept illustration" or "origina
 ## People and content
 
 The household, design brief and design details are fictional. There are no testimonials, awards, completed contracts, budgets or performance results. The figures in the illustrations are generic silhouettes for scale and do not depict anyone.
+
+## Gallery labels
+
+The Courtyard House gallery (`/gallery`, the homepage preview and the project page) labels every view:
+
+| View | Label | Source |
+| --- | --- | --- |
+| 1. The courtyard | Concept visualisation · AI-generated | ChatGPT image generation, supplied by the owner |
+| 2. The street approach | Concept illustration | Original render, `art/courtyard-house-street.svg` |
+| 3. From the sitting room | Concept illustration | Original drawing, `art/courtyard-house-interior.svg` |
+| 4. Zinc meets oak | Detail crop · AI-generated visualisation | Crop of view 1 |
+| 5. How that junction is built | Construction drawing | `art/courtyard-house-detail.svg` |
+| 6. How the house fits together | Construction drawing | `art/courtyard-house-construction.svg` |
+
+### Missing photographic views
+
+Only the courtyard view exists as a photorealistic image. To give the gallery one consistent photographic style, these need to be produced, for example with the same image generator and lighting as the courtyard view:
+
+1. **Street approach:** oblique view from the pavement showing the solid buff-brick frontage, the low entrance link and the oak front door (currently an illustration).
+2. **Interior:** from the west wing sitting room across the courtyard to the kitchen wing, with the garden glazing to one side (currently an illustration).
+3. **Garden elevation:** both wings from the lawn, with the full-height glazing under the deep oak soffits (the project page uses an illustration).
+4. **Material detail at full resolution:** the zinc, oak soffit and brick junction at 1600 px or wider. The current detail crop is only 422 × 300 px.
+5. **Brick, zinc and oak close-ups:** each at 1000 px or wider. The current crops are 220–520 px wide and are shown small for that reason.

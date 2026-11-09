@@ -314,7 +314,7 @@ export function detailSvg() {
   const bz1 = Z1 - 0.18;
   o += `<path d="M${X(bz0)} ${Y(BEAM)}H${X(bz1)}V${Y(BEAM - 0.018)}H${X((bz0 + bz1) / 2 + 0.006)}V${Y(BEAM - 0.282)}H${X(bz1)}V${Y(BEAM - 0.3)}H${X(bz0)}V${Y(BEAM - 0.282)}H${X(
     (bz0 + bz1) / 2 - 0.006,
-  )}V${Y(BEAM - 0.018)}H${X(bz0)}Z" fill="${PAL.orange}" ${ink(1.6)}/>`;
+  )}V${Y(BEAM - 0.018)}H${X(bz0)}Z" fill="${PAL.steel}" ${ink(1.6)}/>`;
   o += `<path d="M${X(Z1 - 0.18)} ${Y(BEAM - 0.1)}V${Y(BEAM)}H${X(Z1)}" stroke="${PAL.ink}" stroke-width="5" fill="none"/>`;
   o += `<path d="M${X(Z1 - 0.18)} ${Y(BEAM - 0.1)}H${X(Z1 - 0.16)}" stroke="${PAL.ink}" stroke-width="3"/>`;
 
@@ -355,7 +355,7 @@ export function detailSvg() {
   const annotations = [];
   callouts.forEach((c, i) => {
     const a = [X(c.at[0]), Y(c.at[1])];
-    o += `<path d="M${f(a[0])} ${f(a[1])}L${c.to[0]} ${c.to[1]}" stroke="${PAL.orange}" stroke-width="1.6"/><circle cx="${f(a[0])}" cy="${f(a[1])}" r="5" fill="${PAL.orange}"/>`;
+    o += `<path d="M${f(a[0])} ${f(a[1])}L${c.to[0]} ${c.to[1]}" stroke="${PAL.goldDeep}" stroke-width="1.6"/><circle cx="${f(a[0])}" cy="${f(a[1])}" r="5" fill="${PAL.goldDeep}"/>`;
     annotations.push({ id: c.id, n: i + 1, label: c.label, x: +((c.to[0] / W) * 100).toFixed(2), y: +((c.to[1] / H) * 100).toFixed(2) });
   });
 

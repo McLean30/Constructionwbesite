@@ -2,7 +2,8 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { AnnotatedFigure } from "@/components/AnnotatedFigure";
-import { courtyardHouse, gallery, soffitImage, visualisationImage } from "@/content/courtyard-house";
+import { Gallery } from "@/components/Gallery";
+import { courtyardGallery, courtyardHouse, gallery, soffitImage, visualisationImage } from "@/content/courtyard-house";
 import { stages } from "@/content/stages";
 
 export const metadata: Metadata = {
@@ -14,7 +15,6 @@ export default function CourtyardHousePage() {
   const view = (id: string) => gallery.find((g) => g.id === id)!;
   const garden = view("garden");
   const detail = view("detail");
-  const moreViews = ["street", "interior", "construction"].map(view);
 
   return (
     <article className="project">
@@ -160,13 +160,16 @@ export default function CourtyardHousePage() {
         <figure className="layout-figure">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
-            src={stages[3].illustration.src}
-            width={stages[3].illustration.width}
-            height={stages[3].illustration.height}
+            src={stages[3].plate.src}
+            width={stages[3].plate.width}
+            height={stages[3].plate.height}
             alt="Axonometric drawing of the completed Courtyard House from above: two wings joined at the street by a low link, around a paved and planted courtyard that opens to the garden."
             loading="lazy"
           />
-          <figcaption>Original drawing. The two wings, the entrance link and the courtyard, seen from the south-east.</figcaption>
+          <figcaption>
+            <span className="kind">Construction drawing</span> The two wings, the entrance link and the courtyard, seen from the south-east. The finishing
+            stage is picked out in gold.
+          </figcaption>
         </figure>
       </section>
 
@@ -197,35 +200,16 @@ export default function CourtyardHousePage() {
         </ol>
       </section>
 
-      {/* ---------- More views ---------- */}
+      {/* ---------- Gallery ---------- */}
       <section className="section gallery" aria-labelledby="gallery-title">
         <header className="section__head">
           <p className="section__index">05</p>
           <h2 id="gallery-title" className="display display--md">
-            More views of the house
+            Gallery
           </h2>
-          <p className="section__lede">Original concept illustrations and drawings of this fictional house. The notes point out what to look for.</p>
+          <p className="section__lede">Six views in the order that explains the house. Each is labelled as a concept visualisation, a crop of it, an illustration or a drawing. Select one to enlarge it.</p>
         </header>
-        <div className="gallery__items">
-          {moreViews.map((g) => (
-            <div key={g.id} className={`gallery__item gallery__item--${g.layout}`} id={`view-${g.id}`}>
-              <div className="gallery__meta">
-                <h3 className="gallery__title">{g.title}</h3>
-                <p className="gallery__notice">
-                  <span className="gallery__notice-label">What to notice</span>
-                  {g.notice}
-                </p>
-              </div>
-              <AnnotatedFigure
-                image={g.image}
-                alt={g.alt}
-                caption={g.caption}
-                annotations={g.annotations}
-                sizes={g.layout === "narrow" ? "(min-width: 960px) 46vw, 100vw" : "(min-width: 960px) 66vw, 100vw"}
-              />
-            </div>
-          ))}
-        </div>
+        <Gallery items={courtyardGallery} />
       </section>
 
       {/* ---------- Stages teaser ---------- */}
@@ -239,7 +223,7 @@ export default function CourtyardHousePage() {
         <ol className="stages-teaser__list">
           {stages.map((s) => (
             <li key={s.id}>
-              <Image src={s.illustration.src} alt="" width={s.illustration.width} height={s.illustration.height} unoptimized loading="lazy" />
+              <Image src={s.plate.src} alt="" width={s.plate.width} height={s.plate.height} unoptimized loading="lazy" />
               <p className="stages-teaser__n">0{s.number}</p>
               <h3>{s.title}</h3>
               <p>{s.summary}</p>

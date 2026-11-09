@@ -136,7 +136,7 @@ export const stages: Stage[] = [
     plate: plate("structure"),
     illustration: drawing(
       "structure",
-      "The same axonometric view with grey blockwork walls on the slabs, orange steel frames at the garden end of each wing and open timber rafters over both roofs.",
+      "The same axonometric view with blockwork walls on the slabs, steel goalpost frames at the garden end of each wing and open timber rafters over both roofs, all picked out in gold as the parts added at this stage.",
     ),
     modelLayers: [
       { id: "blockwork-inner-leaf", label: "Blockwork inner leaf", material: "blockwork" },
