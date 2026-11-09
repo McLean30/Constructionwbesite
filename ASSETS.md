@@ -4,7 +4,7 @@ Formwork Construction and Courtyard House are fictional. Every image on the site
 
 There are two kinds of imagery:
 
-1. **One AI-generated concept visualisation**, supplied by the repository owner (below).
+1. **One AI-generated concept visualisation**, made with ChatGPT image generation and supplied by the repository owner (below).
 2. **Original illustrations and drawings** made in this repository. Image generation was not available when they were made, so they were drawn from scratch. The 3D views are rendered from a single procedural model of the Courtyard House by a small vector renderer written for this project. The scripts that produce every image are in the repository, so any image can be regenerated exactly:
 
 ```bash
@@ -16,10 +16,11 @@ npm run art
 | | |
 | --- | --- |
 | Source file | `assets-src/courtyard-house-visualisation-original.webp` (1672 × 941 px WebP, 385,644 bytes, SHA-256 `a5f9ced63293cc07488a71b80bc6e09fa47098c6f3743e29cf4648edc9403116`) |
-| Provenance | **AI-generated concept visualisation**, supplied by the repository owner as a chat attachment on 9 November 2026 for the `feature/courtyard-visual-pass` revision. The generating tool and prompt were not supplied. |
+| Provenance | **AI-generated concept visualisation, generated with ChatGPT image generation** (OpenAI) and supplied by the repository owner as a chat attachment on 9 November 2026 for the `feature/courtyard-visual-pass` revision. The prompt was not supplied. |
 | Depicts | The courtyard of the fictional Courtyard House at dusk after rain: two buff-brick wings with standing-seam zinc roofs, wet sandstone paving, birch trees and the glazed living room with a fire under a timber-lined soffit. Not a photograph of a real building. |
-| Rights | Used here as the owner's own concept material for this portfolio demo. Check the terms of the image generator before any wider commercial use. |
+| Rights | Used here as the owner's own concept material for this portfolio demo. Check OpenAI's terms for ChatGPT-generated images before any wider commercial use. |
 | Labelling | Captioned "Concept visualisation" wherever it appears. The project page says the image is AI-generated and that small details differ from the construction drawings. |
+| 3D reference | Used only as a visual reference for the material colours and dusk lighting of the 3D assembly. No pixels from it are used in the 3D model. |
 
 Derived files, all made by `npm run crops` (`scripts/art/crop-visualisation.mjs`) with no retouching:
 
@@ -32,7 +33,7 @@ Derived files, all made by `npm run crops` (`scripts/art/crop-visualisation.mjs`
 | `public/images/courtyard-house-material-brick.webp` | 300, 340, 220 × 300 | Material decision: brick |
 | `public/images/courtyard-house-material-oak.webp` | 1262, 300, 180 × 300 | Material decision: oak |
 
-Responsive sizes (AVIF and WebP) are generated at request time by `next/image`. The source is 1672 px wide, so screens wider than that, and the small material crops, are shown at the source's own resolution or slightly enlarged.
+Responsive sizes (AVIF and WebP) are generated at request time by `next/image`. The source is 1672 px wide, so on screens wider than that the hero is shown at the source's own resolution. The brick, zinc and oak crops are displayed at a shared 240 px height, which keeps each at or below its native resolution.
 
 ## Original illustrations and drawings
 
@@ -45,6 +46,7 @@ Responsive sizes (AVIF and WebP) are generated at request time by `next/image`. 
 | `public/images/courtyard-house-construction.webp` (`art/courtyard-house-construction.svg`) | Construction: exploded axonometric of the four stages | Same model, rendered tier by tier using the stage layers in `content/stages.ts` | Original work |
 | `public/stages/foundations.svg`, `structure.svg`, `envelope.svg`, `finish.svg` | Stage drawings on paper (project page), all from one axonometric viewpoint | Same model; each drawing adds that stage's layers and outlines them in orange | Original work |
 | `public/stages/plate-*.svg` | The same four stages as graphite construction plates (homepage) | Same model and camera, graphite theme; new parts tinted and outlined in safety orange | Original work |
+| `public/model/courtyard-house.json` | 3D assembly model: every layer of the house, triangulated, with stage, material and anchor data | Exported from the same procedural model by `scripts/art/export-model.mjs` (`npm run model`) | Original work |
 | `content/generated/annotations.json` | Positions of material labels and stage markers | Projected from 3D anchor points by the same camera as each image | Original work |
 
 All illustrations are labelled on the site as "concept illustration" or "original drawing". None of them is presented as a photograph.

@@ -69,7 +69,7 @@ export interface Stage {
 export const materials: Record<MaterialId, { label: string; colour: string }> = {
   concrete: { label: "Cast concrete", colour: "#bdbab2" },
   blockwork: { label: "Dense concrete blockwork", colour: "#c9c7c0" },
-  steel: { label: "Painted steel", colour: "#ff6534" },
+  steel: { label: "Painted steel", colour: "#4b5156" },
   softwood: { label: "Structural softwood", colour: "#d8c29a" },
   "buff-brick": { label: "Pale buff brick", colour: "#d9c6a0" },
   glass: { label: "Triple glazing", colour: "#9fb3b8" },

@@ -1808,17 +1808,18 @@ ol {
   gap: clamp(20px, 3vw, 40px);
 }
 .material__figure {
+  /* the crops are small: a shared 240px height keeps each at or below its native size */
   position: relative;
+  width: min(100%, var(--w, 240px));
   margin: 0 0 18px;
-  aspect-ratio: 4 / 3;
   overflow: hidden;
   border: 1px solid var(--ink);
   background: var(--concrete);
 }
 .material__figure img {
+  display: block;
   width: 100%;
-  height: 100%;
-  object-fit: cover;
+  height: auto;
 }
 .material__label {
   position: absolute;
@@ -1836,8 +1837,8 @@ ol {
   letter-spacing: 0.08em;
   text-transform: uppercase;
 }
-.material__label span {
-  color: var(--ink-3);
+.material__label span[aria-hidden] {
+  color: var(--ink);
 }
 .material__n {
   font-family: var(--font-display);
@@ -1857,9 +1858,7 @@ ol {
   .materials__list {
     grid-template-columns: minmax(0, 1fr);
   }
-  .material__figure {
-    aspect-ratio: 16 / 10;
-  }
+
 }
 
 .gallery {
@@ -2153,4 +2152,120 @@ article + .site-footer {
 }
 .sequence__pair .sequence__step {
   margin-bottom: 0;
+}
+
+/* ---------- 3D assembly (milestone two) ---------- */
+.assembly {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  opacity: 0;
+  transition: opacity 600ms var(--ease);
+}
+.assembly canvas {
+  display: block;
+  /* vertical swipes keep scrolling the page; sideways drags turn the model */
+  touch-action: pan-y;
+  cursor: grab;
+}
+.assembly canvas:active {
+  cursor: grabbing;
+}
+.is-3d .assembly {
+  opacity: 1;
+}
+/* the illustration stays in the accessibility tree under the canvas */
+.is-3d .plate__img.is-active {
+  opacity: 0;
+  transition-delay: 600ms;
+}
+.plate__chip {
+  position: absolute;
+  z-index: 3;
+  left: 34px;
+  top: 12px;
+  margin: 0;
+  padding: 4px 9px 3px;
+  background: rgb(38 42 39 / 0.85);
+  border: 1px solid rgb(241 237 227 / 0.4);
+  color: var(--chalk);
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 0.85rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  pointer-events: none;
+}
+.plate__chip--hint {
+  color: var(--chalk-2);
+}
+
+.assembly-controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+.assembly-controls .button {
+  min-height: 44px;
+}
+.assembly-controls__play {
+  min-width: 11.5rem;
+}
+.assembly-controls__icon {
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  flex: none;
+}
+.assembly-controls__icon.is-play {
+  background: var(--ink);
+  clip-path: polygon(10% 0, 100% 50%, 10% 100%);
+}
+.assembly-controls__icon.is-pause {
+  border-left: 4px solid var(--ink);
+  border-right: 4px solid var(--ink);
+}
+.button--dark {
+  background: transparent;
+  color: var(--chalk);
+  border-color: rgb(241 237 227 / 0.6);
+}
+.button--dark:hover {
+  background: var(--chalk);
+  color: var(--ink);
+}
+.button--dark:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+  background: transparent;
+  color: var(--chalk);
+}
+.assembly-note {
+  margin: -4px 0 14px;
+  font-size: 0.9rem;
+  color: var(--chalk-2);
+}
+@media (max-width: 1099px) {
+  .assembly-controls {
+    margin: 14px 0 0;
+  }
+}
+@media (max-width: 759px) {
+  .plate__chip {
+    left: 12px;
+    top: 10px;
+    font-size: 0.75rem;
+  }
+  .assembly-controls .button {
+    flex: 1 1 auto;
+  }
+  .assembly-controls__play {
+    flex-basis: 100%;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .assembly {
+    transition: none;
+  }
 }

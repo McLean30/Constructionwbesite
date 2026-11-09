@@ -4,6 +4,16 @@ A portfolio demo for **Formwork Construction**, a fictional Glasgow residential 
 
 > Formwork is fictional. The site is kept out of search indexes, and the enquiry form never sends or stores anything.
 
+## Milestone two: 3D assembly (`feature/courtyard-3d-assembly`)
+
+Inside *See how the house comes together*, visitors can watch Courtyard House being built in 3D.
+
+- **Same house, same view:** `scripts/art/export-model.mjs` exports the model behind the drawings (dimensions, orientation, courtyard layout, materials and the named layers in `content/stages.ts`) to `public/model/courtyard-house.json`, about 15 KB gzipped. The orthographic camera reproduces the plate's axonometric framing, so the 3D view opens exactly over the illustration.
+- **Stages:** Foundations brings in the slab around the courtyard, Structure raises the blockwork and roof timbers, Envelope adds buff brick, glazing and zinc, and Finish adds oak soffits, joinery, interiors and courtyard planting. New parts glow safety orange, then settle into their material colours. The tab, caption and *Added at this stage* list always match the stage on screen.
+- **Controls:** *Play the build*, *Pause* and *Replay*, the four stage tabs (arrow keys, Home and End) and *Reset view*. Choosing a stage during playback stops playback and goes straight to that stage. Drag sideways to turn the model gently. The mouse wheel and vertical touch swipes keep scrolling the page. With reduced motion, stages switch immediately.
+- **Performance:** the hero and enquiry form need no 3D code. React Three Fiber, Three.js and GSAP sit in one lazy chunk that loads only when the plate comes within about 320 px of the viewport. The illustration stays until the first 3D frame has drawn. Rendering is on demand, so nothing draws while the model is idle. Phones and touch devices are capped at 1.5× resolution with no shadow maps. Every geometry, material, texture and tween is released on unmount.
+- **Fallbacks:** if WebGL is unavailable, Data Saver is on, or the model fails to load or render, the illustrated plates stay, with playback and stage selection still working, and a short note explains why.
+
 ## Visual pass (`feature/courtyard-visual-pass`)
 
 - **Homepage hero:** "Courtyard House" headline with the service line, *Discuss your project* and *Explore the house*, and the supplied concept visualisation at full content width. Desktop crops only the foreground, so both rooflines stay in. Phones get a separate square crop centred on the courtyard and the glazed living room, served with `<picture>`.
@@ -31,6 +41,14 @@ npm run dev
 
 Then open <http://localhost:3000>.
 
+Production preview (the same build that was tested):
+
+```bash
+npm ci && npm run build && npm start
+```
+
+Then open <http://localhost:3000/#build-process>.
+
 Production build:
 
 ```bash
@@ -53,6 +71,12 @@ Regenerate every illustration and drawing (see [ASSETS.md](./ASSETS.md)):
 npm run art
 ```
 
+Re-export the 3D model after changing `scripts/art/model.mjs`:
+
+```bash
+npm run model
+```
+
 Regenerate the crops of the supplied concept visualisation:
 
 ```bash
@@ -63,7 +87,8 @@ npm run crops
 
 ```
 app/                     App Router pages (server components), global CSS, robots.ts
-components/              SiteHeader, StageExplorer and EnquiryForm (client); AnnotatedFigure, SiteFooter (server)
+components/              SiteHeader, StageExplorer and EnquiryForm (client); AnnotatedFigure, HeroVisual, SiteFooter (server)
+  assembly/              Lazy-loaded 3D assembly: Assembly3D (React Three Fiber scene) and houseModel (Three.js builder)
 content/
   stages.ts              The four construction stages: ids, copy, drawings and 3D model-layer names
   courtyard-house.ts     Project story, material decisions and gallery
@@ -72,14 +97,15 @@ content/
 scripts/art/             Procedural model, vector renderer and 2D drawings used to make every image
 art/                     SVG masters of the raster images
 public/images, /stages   WebP images and stage SVG drawings (paper and graphite plates)
+public/model             3D assembly model exported from scripts/art/model.mjs
 assets-src/              Original supplied concept visualisation (source for the crops)
 ```
 
 Content and stage data are kept apart from the components. `content/stages.ts` has no framework imports, so both the Next.js app and the Node art pipeline read it. The art pipeline refuses to draw any geometry whose layer is not declared there.
 
-## Milestone two: the interactive 3D model
+## Stage data contract
 
-`content/stages.ts` is the contract for the 3D assembly. For each stage it gives:
+`content/stages.ts` is the contract shared by the drawings and the 3D assembly. For each stage it gives:
 
 - `id`, `number`, `title`, `summary`, `description` and `added`: the copy the explorer already shows.
 - `modelLayers`: an ordered list of `{ id, label, material }`. The ids are the group names the 3D scene should use: `site-base`, `setting-out-grid`, `ground-slab`, `courtyard-void`, `blockwork-inner-leaf`, `steel-goalpost-frames`, `roof-timbers`, `brick-outer-leaf`, `glazing`, `zinc-roof`, `oak-joinery`, `timber-soffits`, `interior-finishes` and `courtyard-planting`.
@@ -88,7 +114,7 @@ Content and stage data are kept apart from the components. `content/stages.ts` h
 - `illustration` and `plate`: the 2D drawings (paper and graphite), which stay as the fallback when WebGL is unavailable.
 - `markers`: drawing anchor ids in the same order as `added`.
 
-`scripts/art/model.mjs` already describes the full geometry in metres, layer by layer (x east, y up, z south), and can be ported to React Three Fiber meshes.
+`scripts/art/model.mjs` describes the full geometry in metres, layer by layer (x east, y up, z south). `npm run model` exports it for the 3D scene in `components/assembly/`.
 
 ## Accessibility and quality notes
 

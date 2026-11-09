@@ -65,8 +65,9 @@ export const LINK = { x0: 6.5, x1: 13.5, z0: 0, z1: DIM.LINK_Z };
  * @param {number[]} o.offset  translation applied to everything (exploded view)
  * @param {"drawing"|"scene"} o.mode  drawing = paper axonometric, scene = illustrated view
  * @param {number} o.brickSpacing  spacing of coursing lines (m)
+ * @param {"drawing"|"raw"} o.palette  raw keeps true material colours (3D export)
  */
-export function buildModel({ stage = "finish", highlight = null, only = null, offset = [0, 0, 0], mode = "drawing", brickSpacing = 0.225, theme = "paper" } = {}) {
+export function buildModel({ stage = "finish", highlight = null, only = null, offset = [0, 0, 0], mode = "drawing", brickSpacing = 0.225, theme = "paper", palette = "drawing", cull = true } = {}) {
   // "graphite" draws light linework on a dark plate; "paper" is the default drawing
   const dark = theme === "graphite";
   const INK = dark ? GRAPHITE.ink : PAL.ink;
@@ -78,7 +79,8 @@ export function buildModel({ stage = "finish", highlight = null, only = null, of
   const anchors = [];
   const overlays = [];
   const drawing = mode === "drawing";
-  const col = (c) => (drawing ? (dark ? E.mix(c === PAL.zinc ? "#50565a" : c, "#7d8380", 0.12) : E.mix(c, BG, 0.18)) : c);
+  const raw = palette === "raw";
+  const col = (c) => (drawing && !raw ? (dark ? E.mix(c === PAL.zinc ? "#50565a" : c, "#7d8380", 0.12) : E.mix(c, BG, 0.18)) : c);
 
   for (const s of stages) for (const l of s.modelLayers) if (!layerStage[l.id]) throw new Error("bad layer");
   const has = (layer) => {
@@ -113,7 +115,10 @@ export function buildModel({ stage = "finish", highlight = null, only = null, of
   };
   const sprite = (layer, factory, at, opts) => {
     if (!has(layer)) return;
-    sprites.push(factory(E.add(at, offset), { ...opts, highlight: isHl(layer) ? PAL.orange : undefined }));
+    const sp = factory(E.add(at, offset), { ...opts, highlight: isHl(layer) ? PAL.orange : undefined });
+    sp.layer = layer;
+    sp.meta = { kind: factory === E.tree ? "tree" : "person", at: E.add(at, offset), ...opts };
+    sprites.push(sp);
   };
   const anchor = (layer, id, label, p) => {
     if (has(layer)) anchors.push({ id, label, stage: layerStage[layer], point: E.add(p, offset) });
@@ -143,8 +148,8 @@ export function buildModel({ stage = "finish", highlight = null, only = null, of
     }
     return s;
   };
-  const glassFill = drawing ? "#c4d2d3" : "url(#glass)";
-  const glassStyle = (extra = {}) => ({ fill: glassFill, opacity: drawing ? 0.75 : 0.9, stroke: INK, strokeOpacity: 0.6, strokeWidth: 0.8, ...extra });
+  const glassFill = raw ? PAL.glass : drawing ? "#c4d2d3" : "url(#glass)";
+  const glassStyle = (extra = {}) => ({ fill: glassFill, opacity: drawing ? 0.75 : 0.9, stroke: INK, strokeOpacity: 0.6, strokeWidth: 0.8, glass: true, ...extra });
 
   // ---------------- site base (drawing only) ----------------
   if (drawing && has("site-base")) {
@@ -153,7 +158,7 @@ export function buildModel({ stage = "finish", highlight = null, only = null, of
     if (has("setting-out-grid")) {
       const gx = [0, 6.5, 13.5, 20];
       const gz = [0, 4.5, 14, 17];
-      const gridStyle = { stroke: isHl("setting-out-grid") ? PAL.orange : INK, strokeOpacity: 0.7, strokeWidth: 0.7, dash: "6 5" };
+      const gridStyle = { stroke: isHl("setting-out-grid") ? PAL.orange : INK, strokeOpacity: 0.7, strokeWidth: 0.7, dash: "6 5", layer: "setting-out-grid" };
       for (const x of gx) top.details.push({ type: "line", pts: [[x, 0.01, -3.6], [x, 0.01, 20.6]], ...gridStyle });
       for (const z of gz) top.details.push({ type: "line", pts: [[-3.6, 0.01, z], [23.6, 0.01, z]], ...gridStyle });
       const labels = [
@@ -211,7 +216,7 @@ export function buildModel({ stage = "finish", highlight = null, only = null, of
     // --- structure: blockwork inner leaf ---
     const innerStyle = { fill: col(PAL.block) };
     const cavityCull = (sol) => {
-      if (!has("brick-outer-leaf") || only) return sol;
+      if (!cull || !has("brick-outer-leaf") || only) return sol;
       sol.faces = sol.faces.filter((f) => {
         if (Math.abs(f.normal[1]) > 0.5) return true;
         const p = E.add(E.centroid(f.pts), E.mul(f.normal, 0.06));
@@ -445,7 +450,7 @@ export function buildModel({ stage = "finish", highlight = null, only = null, of
   {
     const { x0, x1, z0, z1 } = LINK;
     const linkInner = E.box(x0 - 0.2, SL, z0 + I, x1 + 0.2, EAVE, z0 + I + T, { fill: col(PAL.block) });
-    if (has("brick-outer-leaf") && !only) linkInner.faces = linkInner.faces.filter((f) => f.normal[2] > -0.5);
+    if (cull && has("brick-outer-leaf") && !only) linkInner.faces = linkInner.faces.filter((f) => f.normal[2] > -0.5);
     put("blockwork-inner-leaf", linkInner);
     put("steel-goalpost-frames", E.box(x0 - 0.2, 2.75, z1 - 0.22, x1 + 0.2, EAVE, z1 - 0.1, { fill: drawing ? col(PAL.steel) : PAL.plaster }));
     for (let x = x0 + 0.3; x < x1; x += 0.7) put("roof-timbers", E.box(x, EAVE, z0 + 0.2, x + 0.06, EAVE + 0.18, z1 - 0.1, { fill: col(PAL.softwood), strokeWidth: 0.6, bias: has("zinc-roof") ? 1.5 : 0 }));

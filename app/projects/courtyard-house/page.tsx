@@ -182,10 +182,12 @@ export default function CourtyardHousePage() {
         <ol className="materials__list">
           {courtyardHouse.materials.map((m, i) => (
             <li key={m.id} className="material">
-              <figure className="material__figure">
-                <Image src={m.image} alt={m.alt} sizes="(min-width: 900px) 30vw, 100vw" quality={80} placeholder="blur" />
+              {/* shown at a shared 240px height, never above the crop's native resolution */}
+              <figure className="material__figure" style={{ "--w": `${Math.round((m.image.width * 240) / m.image.height)}px` } as React.CSSProperties}>
+                <Image src={m.image} alt={m.alt} sizes={`${Math.round((m.image.width * 240) / m.image.height)}px`} quality={80} placeholder="blur" />
                 <figcaption className="material__label">
-                  <span aria-hidden="true">0{i + 1}</span> {m.title}
+                  <span aria-hidden="true">0{i + 1}</span>
+                  <span className="visually-hidden">{m.title}, detail from the concept visualisation</span>
                 </figcaption>
               </figure>
               <h3 className="material__title">{m.title}</h3>
