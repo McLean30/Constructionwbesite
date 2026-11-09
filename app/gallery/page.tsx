@@ -5,7 +5,7 @@ import { courtyardGallery } from "@/content/courtyard-house";
 
 export const metadata: Metadata = {
   title: "Gallery: Courtyard House",
-  description: "Six views of Courtyard House, a fictional concept: the courtyard, the street approach, the interior, a material detail and two construction drawings.",
+  description: "Seven views of Courtyard House, a fictional concept: the courtyard, the garden elevation, the street approach, the sitting room, the zinc and oak junction and two construction drawings.",
 };
 
 export default function GalleryPage() {
@@ -25,9 +25,9 @@ export default function GalleryPage() {
           Courtyard House, view by view
         </h1>
         <p className="section__lede">
-          Six views, in the order that explains the house: the courtyard, the street, the rooms, the materials and how it is built. Each is labelled
-          as an AI-generated concept visualisation, a crop of it, an original illustration or a construction drawing. None is a photograph of a
-          built house.
+          Seven views, in the order that explains the house: the courtyard, the whole house from the garden, the street, the sitting room, one
+          junction, and how it is built. Each is labelled as an AI-generated concept visualisation, an illustration or a construction drawing. The
+          visualisations are artistic views of a fictional house; the drawings and the 3D model are the geometric reference. None is a photograph.
         </p>
       </header>
       <Gallery items={courtyardGallery} headingLevel={3} />

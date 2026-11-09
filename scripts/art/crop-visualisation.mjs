@@ -14,10 +14,16 @@ const out = (n) => path.join(root, "public/images", n);
 const crops = [
   ["courtyard-house-visualisation.webp", 0, 0, 1672, 941, "full frame, desktop hero"],
   ["courtyard-house-visualisation-phone.webp", 540, 0, 940, 941, "phone hero: courtyard and glazed living room"],
-  ["courtyard-house-visualisation-soffit.webp", 1250, 150, 422, 300, "zinc roof edge meeting the oak soffit"],
-  ["courtyard-house-material-zinc.webp", 90, 40, 520, 300, "standing-seam zinc roof"],
-  ["courtyard-house-material-brick.webp", 300, 340, 220, 300, "buff brick wall"],
-  ["courtyard-house-material-oak.webp", 1262, 300, 180, 300, "oak soffit and timber boarding"],
+];
+
+// Dedicated AI-generated views supplied for the gallery (see ASSETS.md): [source, output, crop|null, purpose]
+const views = [
+  ["courtyard-house-garden-elevation-original.webp", "courtyard-house-garden-elevation.webp", null, "garden elevation, gallery"],
+  ["courtyard-house-sitting-room-original.webp", "courtyard-house-sitting-room.webp", null, "sitting room, gallery and homepage preview"],
+  ["courtyard-house-soffit-original.webp", "courtyard-house-soffit.webp", null, "zinc edge and oak soffit junction"],
+  ["courtyard-house-zinc-roof-original.webp", "courtyard-house-material-zinc.webp", null, "material: standing-seam zinc"],
+  ["courtyard-house-brick-original.webp", "courtyard-house-material-brick.webp", null, "material: buff brick"],
+  ["courtyard-house-soffit-original.webp", "courtyard-house-material-oak.webp", [640, 0, 900, 600], "material: oak soffit boards"],
 ];
 
 for (const [file, left, top, width, height, purpose] of crops) {
@@ -29,4 +35,17 @@ for (const [file, left, top, width, height, purpose] of crops) {
   }
   await sharp(src).extract({ left, top, width, height }).webp({ quality: 88, effort: 6 }).toFile(out(file));
   console.log(`${file}  ${width}x${height}  ${purpose}`);
+}
+
+for (const [srcFile, file, crop, purpose] of views) {
+  let img = sharp(path.join(root, "assets-src", srcFile));
+  if (crop) img = img.extract({ left: crop[0], top: crop[1], width: crop[2], height: crop[3] });
+  // re-encoded once as the master; next/image derives the responsive sizes from it
+  let info = await img.webp({ quality: 84, effort: 6, smartSubsample: true }).toFile(out(file));
+  const original = path.join(root, "assets-src", srcFile);
+  if (!crop && info.size >= fs.statSync(original).size) {
+    fs.copyFileSync(original, out(file)); // the supplied file is already smaller: keep it as is
+    info = { ...info, size: fs.statSync(original).size };
+  }
+  console.log(`${file}  ${info.width}x${info.height}  ${(info.size / 1024).toFixed(0)} KB  ${purpose}`);
 }

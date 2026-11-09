@@ -3,7 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { AnnotatedFigure } from "@/components/AnnotatedFigure";
 import { Gallery } from "@/components/Gallery";
-import { courtyardGallery, courtyardHouse, gallery, soffitImage, visualisationImage } from "@/content/courtyard-house";
+import { courtyardGallery, courtyardHouse, gallery, gardenElevationImage, soffitImage, visualisationImage } from "@/content/courtyard-house";
 import { stages } from "@/content/stages";
 
 export const metadata: Metadata = {
@@ -13,7 +13,6 @@ export const metadata: Metadata = {
 
 export default function CourtyardHousePage() {
   const view = (id: string) => gallery.find((g) => g.id === id)!;
-  const garden = view("garden");
   const detail = view("detail");
 
   return (
@@ -85,8 +84,11 @@ export default function CourtyardHousePage() {
           <p className="sequence__label">
             <span>A</span> The whole house
           </p>
-          <AnnotatedFigure image={garden.image} alt={garden.alt} caption={garden.caption} sizes="(min-width: 1480px) 1400px, 100vw" />
-          <p className="sequence__note">{garden.notice}</p>
+          <AnnotatedFigure image={gardenElevationImage.image} alt={gardenElevationImage.alt} caption={gardenElevationImage.caption} sizes="(min-width: 1480px) 1400px, 100vw" />
+          <p className="sequence__note">
+            From the garden the two wings read as simple brick gables, almost all glass at ground level. Between them the low glazed link holds the
+            living room, so the courtyard and the hills are visible right through the house.
+          </p>
         </div>
 
         <div className="sequence__pair">
@@ -95,15 +97,15 @@ export default function CourtyardHousePage() {
               <span>B</span> Where zinc meets oak
             </p>
             <figure className="detail-crop">
-              <Image src={soffitImage.image} alt={soffitImage.alt} sizes="(min-width: 960px) 422px, 100vw" quality={80} placeholder="blur" />
+              <Image src={soffitImage.image} alt={soffitImage.alt} sizes="(min-width: 960px) 52vw, 100vw" quality={80} placeholder="blur" />
               <figcaption>{soffitImage.caption}</figcaption>
             </figure>
           </div>
           <div className="sequence__pair-text">
             <p className="pull-quote">A thin dark lid, a warm underside and a pale wall.</p>
             <p>
-              At the end of each wing the roof runs on past the glass. From the courtyard you see three materials meet in one line: the folded zinc
-              edge, the oak boards beneath it and the buff brick that carries them. The drawing below shows how that line is built.
+              The roof runs on past the glass. Look up and three materials meet in one line: the slim dark roof edge, the oak boards beneath it
+              and the buff brick that carries them. The drawing below shows how that line is built.
             </p>
           </div>
         </div>
@@ -180,18 +182,19 @@ export default function CourtyardHousePage() {
           <h2 id="materials-title" className="display display--md">
             Three material decisions
           </h2>
-          <p className="section__lede">Each detail is cropped from the concept visualisation.</p>
+          <p className="section__lede">Each material shown close up, in AI-generated concept visualisations of the fictional house.</p>
         </header>
         <ol className="materials__list">
           {courtyardHouse.materials.map((m, i) => (
             <li key={m.id} className="material">
-              {/* shown at a shared 240px height, never above the crop's native resolution */}
-              <figure className="material__figure" style={{ "--w": `${Math.round((m.image.width * 240) / m.image.height)}px` } as React.CSSProperties}>
-                <Image src={m.image} alt={m.alt} sizes={`${Math.round((m.image.width * 240) / m.image.height)}px`} quality={80} placeholder="blur" />
-                <figcaption className="material__label">
-                  <span aria-hidden="true">0{i + 1}</span>
-                  <span className="visually-hidden">{m.title}, detail from the concept visualisation</span>
-                </figcaption>
+              <figure className="material__figure">
+                <span className="material__media">
+                  <Image src={m.image} alt={m.alt} sizes="(min-width: 900px) 30vw, 100vw" quality={80} placeholder="blur" />
+                  <span className="material__label" aria-hidden="true">
+                    0{i + 1}
+                  </span>
+                </span>
+                <figcaption className="material__caption">{m.caption}</figcaption>
               </figure>
               <h3 className="material__title">{m.title}</h3>
               <p>{m.text}</p>
@@ -207,7 +210,7 @@ export default function CourtyardHousePage() {
           <h2 id="gallery-title" className="display display--md">
             Gallery
           </h2>
-          <p className="section__lede">Six views in the order that explains the house. Each is labelled as a concept visualisation, a crop of it, an illustration or a drawing. Select one to enlarge it.</p>
+          <p className="section__lede">Seven views in the order that explains the house. Each is labelled as an AI-generated concept visualisation, an illustration or a construction drawing. Select one to enlarge it.</p>
         </header>
         <Gallery items={courtyardGallery} />
       </section>

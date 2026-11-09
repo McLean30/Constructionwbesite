@@ -1873,18 +1873,25 @@ ol {
   gap: clamp(20px, 3vw, 40px);
 }
 .material__figure {
-  /* the crops are small: a shared 240px height keeps each at or below its native size */
-  position: relative;
-  width: min(100%, var(--w, 240px));
   margin: 0 0 18px;
+}
+.material__media {
+  position: relative;
+  display: block;
+  aspect-ratio: 4 / 3;
   overflow: hidden;
-  border: 1px solid var(--ink);
+  border: 1px solid var(--rule-strong);
   background: var(--concrete);
 }
-.material__figure img {
-  display: block;
+.material__media img {
   width: 100%;
-  height: auto;
+  height: 100%;
+  object-fit: cover;
+}
+.material__caption {
+  padding-top: 8px;
+  font-size: 0.85rem;
+  color: var(--ink-2);
 }
 .material__label {
   position: absolute;
@@ -2157,7 +2164,7 @@ ol {
 }
 .sequence__pair {
   display: grid;
-  grid-template-columns: minmax(0, 422px) minmax(0, 1fr);
+  grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
   align-items: end;
   margin-bottom: clamp(36px, 5vw, 72px);
   gap: clamp(24px, 4vw, 64px);
@@ -2181,9 +2188,7 @@ ol {
   .sequence__pair {
     grid-template-columns: minmax(0, 1fr);
   }
-  .detail-crop {
-    max-width: 422px;
-  }
+
 }
 
 /* ---------- Header on phones: keep the full name ---------- */
@@ -2812,4 +2817,36 @@ html.has-lightbox {
 }
 .enquire.theme-light .demo-note--strong {
   background: #e7e3d8;
+}
+
+/* ---------- Construction drawings beside the build explanation ---------- */
+.plate-drawings {
+  margin-top: clamp(40px, 5vw, 72px);
+  padding-top: 24px;
+  border-top: 1px solid rgb(241 237 227 / 0.2);
+}
+.plate-drawings__title {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 1.8rem;
+  line-height: 1.05;
+}
+.plate-drawings__lede {
+  margin: 6px 0 20px;
+  color: var(--chalk-2);
+}
+.plate-drawings .gallery-grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  max-width: 900px;
+}
+.plate-drawings .gallery-tile__media {
+  background: var(--limestone);
+}
+.plate-drawings .gallery-tile__media img {
+  object-fit: contain;
+}
+@media (max-width: 699px) {
+  .plate-drawings .gallery-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
 }

@@ -2,13 +2,13 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useId, useRef, useState } from "react";
 import type { GalleryView } from "@/content/courtyard-house";
 
 interface Props {
   items: GalleryView[];
-  /** Show only the first n tiles (homepage preview). The enlarged view still steps through every item. */
-  preview?: number;
+  /** Show only these items as tiles (homepage preview). The enlarged view still steps through every item. */
+  preview?: string[];
   /** Heading level for the tile titles. */
   headingLevel?: 3 | 4;
 }
@@ -23,7 +23,9 @@ export function Gallery({ items, preview, headingLevel = 3 }: Props) {
   const [open, setOpen] = useState<number | null>(null);
   const dialogRef = useRef<HTMLDialogElement>(null);
   const triggerRef = useRef<HTMLButtonElement | null>(null);
-  const tiles = preview ? items.slice(0, preview) : items;
+  const uid = useId();
+  const titleId = `${uid}-lightbox-title`;
+  const tiles = (preview ? items.filter((it) => preview.includes(it.id)) : items).map((item) => ({ item, index: items.indexOf(item) }));
   const H = `h${headingLevel}` as "h3" | "h4";
   const count = items.length;
 
@@ -73,14 +75,14 @@ export function Gallery({ items, preview, headingLevel = 3 }: Props) {
   return (
     <>
       <ul className={`gallery-grid ${preview ? "gallery-grid--preview" : ""}`}>
-        {tiles.map((item, i) => (
+        {tiles.map(({ item, index: i }) => (
           <li key={item.id} className="gallery-tile">
             <button type="button" className="gallery-tile__button" onClick={(e) => show(i, e.currentTarget)} aria-haspopup="dialog">
               <span className="gallery-tile__media">
                 <Image
                   src={item.image}
                   alt={item.alt}
-                  sizes={preview ? "(min-width: 900px) 30vw, 100vw" : "(min-width: 1100px) 30vw, (min-width: 700px) 45vw, 100vw"}
+                  sizes="(min-width: 1100px) 30vw, (min-width: 700px) 45vw, 100vw"
                   quality={80}
                   placeholder="blur"
                 />
@@ -101,13 +103,13 @@ export function Gallery({ items, preview, headingLevel = 3 }: Props) {
           </li>
         ))}
       </ul>
-      {preview && preview < count && (
+      {preview && preview.length < count && (
         <Link href="/gallery" className="text-link gallery-more">
           See all {count} views of Courtyard House <span aria-hidden="true">→</span>
         </Link>
       )}
 
-      <dialog ref={dialogRef} className="lightbox" aria-labelledby="lightbox-title" onKeyDown={onKeyDown}>
+      <dialog ref={dialogRef} className="lightbox" aria-labelledby={titleId} onKeyDown={onKeyDown}>
         {current && (
           <div className="lightbox__inner">
             <header className="lightbox__bar">
@@ -120,18 +122,22 @@ export function Gallery({ items, preview, headingLevel = 3 }: Props) {
               </button>
             </header>
             <div className="lightbox__stage">
-              {items.map((item, i) => (
-                <Image
-                  key={item.id}
-                  src={item.image}
-                  alt={i === open ? item.alt : ""}
-                  aria-hidden={i !== open}
-                  sizes="92vw"
-                  quality={80}
-                  loading={Math.abs(i - (open ?? 0)) <= 1 ? "eager" : "lazy"}
-                  className={`lightbox__img ${i === open ? "is-active" : ""}`}
-                />
-              ))}
+              {/* the large asset is requested only for the open view and its two neighbours */}
+              {items.map((item, i) => {
+                const near = open !== null && (Math.abs(i - open) <= 1 || Math.abs(i - open) === count - 1);
+                return near ? (
+                  <Image
+                    key={item.id}
+                    src={item.image}
+                    alt={i === open ? item.alt : ""}
+                    aria-hidden={i !== open}
+                    sizes="92vw"
+                    quality={80}
+                    loading="eager"
+                    className={`lightbox__img ${i === open ? "is-active" : ""}`}
+                  />
+                ) : null;
+              })}
             </div>
             <footer className="lightbox__foot">
               <button type="button" className="lightbox__nav" onClick={() => step(-1)}>
@@ -139,7 +145,7 @@ export function Gallery({ items, preview, headingLevel = 3 }: Props) {
               </button>
               <div className="lightbox__text" aria-live="polite">
                 <p className="lightbox__kind">{current.kind}</p>
-                <h2 id="lightbox-title" className="lightbox__title">
+                <h2 id={titleId} className="lightbox__title">
                   {current.title}
                 </h2>
                 <p className="lightbox__caption">{current.caption}</p>

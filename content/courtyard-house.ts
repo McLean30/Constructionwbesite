@@ -6,7 +6,9 @@ import detail from "@/public/images/courtyard-house-detail.webp";
 import construction from "@/public/images/courtyard-house-construction.webp";
 import visualisation from "@/public/images/courtyard-house-visualisation.webp";
 import visualisationPhone from "@/public/images/courtyard-house-visualisation-phone.webp";
-import soffitDetail from "@/public/images/courtyard-house-visualisation-soffit.webp";
+import soffitDetail from "@/public/images/courtyard-house-soffit.webp";
+import gardenElevation from "@/public/images/courtyard-house-garden-elevation.webp";
+import sittingRoom from "@/public/images/courtyard-house-sitting-room.webp";
 import brickDetail from "@/public/images/courtyard-house-material-brick.webp";
 import zincDetail from "@/public/images/courtyard-house-material-zinc.webp";
 import oakDetail from "@/public/images/courtyard-house-material-oak.webp";
@@ -71,21 +73,24 @@ export const courtyardHouse = {
       title: "Pale buff brick",
       text: "A pale brick catches the soft, grey daylight of the west of Scotland and holds it. It echoes the blond sandstone of older Glasgow villas without imitating it, and it lets the street elevation be quiet and solid without feeling heavy.",
       image: brickDetail,
-      alt: "Close view of pale buff brickwork with varied, slightly weathered faces beside a dark window frame.",
+      alt: "Close view of a pale buff brick corner in low sun: textured, slightly speckled brick faces, recessed mortar joints and a branch of yellow autumn leaves.",
+      caption: "Concept visualisation · AI-generated. A buff brick corner: textured faces and recessed joints.",
     },
     {
       id: "zinc",
       title: "Dark standing-seam zinc",
       text: "Zinc suits a low roof pitch and can be folded cleanly over the deep garden overhang, so the roof reads as one thin, dark lid. The standing seams run down the slope and give the roof a fine texture against the brick.",
       image: zincDetail,
-      alt: "Dark standing-seam zinc roof, wet with rain, with seams running down the slope to a slim eaves edge above buff brick.",
+      alt: "Wet dark standing-seam roof close up, its raised seams running down the slope to a slim eaves edge above buff brick, looking along to a lit living room with a fire.",
+      caption: "Concept visualisation · AI-generated. Raised standing seams carry rain down to a slim eaves edge.",
     },
     {
       id: "oak",
       title: "Oak joinery",
       text: "Oak is used wherever people touch or look closely: the entrance door, window and door frames, and the soffit boards under the overhang. The same timber runs from the living room ceiling to the terrace, joining inside and outside.",
       image: oakDetail,
-      alt: "Oak soffit boards with small downlights above vertical timber boarding, meeting a buff brick wall.",
+      alt: "Close view of oak soffit boards with a strong grain and a single recessed downlight, meeting a dark window frame.",
+      caption: "Crop of an AI-generated concept visualisation. Grained oak soffit boards with a recessed downlight.",
     },
   ],
 };
@@ -166,21 +171,30 @@ export const visualisationImage = {
   description: "Across the courtyard to the glazed living room in the entrance link.",
 };
 
+const SOFFIT_ALT =
+  "Looking up at the overhang: a slim dark metal roof edge wraps a soffit of long oak boards with recessed downlights, which runs out over buff brick and tall glazing, with a standing-seam roof and hills beyond.";
+
 export const soffitImage = {
   image: soffitDetail,
-  alt: "Detail of the east wing: the dark zinc roof edge turns down over oak soffit boards with small downlights, above a buff brick pier and a tall glazed opening.",
-  caption: "Detail from the concept visualisation. The zinc roof edge folds over the oak-lined soffit, which oversails the buff brick and the glazing below.",
+  alt: SOFFIT_ALT,
+  caption: "Concept visualisation · AI-generated. A slim dark roof edge wraps the oak soffit, which runs out over the brick and glazing.",
+};
+
+export const gardenElevationImage = {
+  image: gardenElevation,
+  alt: "Garden elevation at dusk: two buff-brick wings with dark standing-seam roofs and full-height glazing, a glazed living room with a fire between them, birch trees and wet paving in front, heathland grasses and hills behind.",
+  caption: "Concept visualisation · AI-generated. Both wings and the glazed link from the garden, at dusk.",
 };
 export const projects = { [courtyardHouse.slug]: courtyardHouse };
 
 /** What kind of image this is: shown on every gallery tile and in the enlarged view. */
-export type ImageKind = "Concept visualisation · AI-generated" | "Detail crop · AI-generated visualisation" | "Concept illustration" | "Construction drawing";
+export type ImageKind = "Concept visualisation · AI-generated" | "Concept illustration" | "Construction drawing";
 
 export interface GalleryView {
   id: string;
   kind: ImageKind;
   title: string;
-  /** One short line: what this view adds to what the visitor has already seen. */
+  /** One short line describing what is actually visible. */
   caption: string;
   image: StaticImageData;
   alt: string;
@@ -189,41 +203,50 @@ export interface GalleryView {
 const byId = (id: string) => gallery.find((g) => g.id === id)!;
 
 /**
- * The Courtyard House gallery, in the order a visitor learns the house: the courtyard first,
- * then how it meets the street, how it feels inside, what it is made of and how it is built.
+ * The Courtyard House gallery, in the order a visitor learns the house: the courtyard, the
+ * whole house from the garden, the street, inside, one junction, then how it is built.
+ * The AI-generated views are artistic; the model and drawings are the geometric reference.
  */
 export const courtyardGallery: GalleryView[] = [
   {
     id: "courtyard",
     kind: "Concept visualisation · AI-generated",
     title: "The courtyard",
-    caption: "The heart of the plan: a sheltered outdoor room between two brick wings.",
+    caption: "Wet sandstone paving and birches between the two brick wings, with the living room lit at the far end.",
     image: visualisation,
     alt: visualisationImage.alt,
+  },
+  {
+    id: "garden",
+    kind: "Concept visualisation · AI-generated",
+    title: "From the garden",
+    caption: "Both gabled wings and the glazed link at dusk, with heath and hills behind.",
+    image: gardenElevation,
+    alt: gardenElevationImage.alt,
   },
   {
     id: "street",
     kind: "Concept illustration",
     title: "The street approach",
-    caption: "A quiet brick face to the pavement, with the front door set into the low link.",
+    caption: "Mostly solid brick to the pavement, with the front door in the low link.",
     image: byId("street").image,
     alt: byId("street").alt,
   },
   {
-    id: "interior",
-    kind: "Concept illustration",
-    title: "From the sitting room",
-    caption: "Inside, the courtyard becomes the view: green, private and close.",
-    image: byId("interior").image,
-    alt: byId("interior").alt,
+    id: "sitting-room",
+    kind: "Concept visualisation · AI-generated",
+    title: "The sitting room",
+    caption: "Fireside chairs facing full-height glazing onto the rain-wet courtyard and the brick wing opposite.",
+    image: sittingRoom,
+    alt: "Sitting room at dusk: oak floor, a tartan armchair and a linen sofa around a round table, a glass-fronted fire on the right, and full-height sliding glazing onto a wet paved courtyard with birches, a buff-brick wing with a dark roof, and hills beyond.",
   },
   {
-    id: "material",
-    kind: "Detail crop · AI-generated visualisation",
+    id: "junction-view",
+    kind: "Concept visualisation · AI-generated",
     title: "Zinc meets oak",
-    caption: "The dark zinc roof edge folds over an oak-lined soffit above the buff brick.",
+    caption: "A slim dark roof edge wraps the oak soffit with its downlights, over buff brick and glass.",
     image: soffitDetail,
-    alt: "Detail of the east wing: the dark zinc roof edge turns down over oak soffit boards with small downlights, above a buff brick pier and a tall glazed opening.",
+    alt: SOFFIT_ALT,
   },
   {
     id: "junction",
@@ -242,3 +265,9 @@ export const courtyardGallery: GalleryView[] = [
     alt: byId("construction").alt,
   },
 ];
+
+/** Homepage preview: the street, the inside and one junction. */
+export const homepagePreviewIds = ["street", "sitting-room", "junction-view"];
+
+/** The two construction drawings, shown beside the build explanation. */
+export const constructionDrawings = courtyardGallery.filter((g) => g.kind === "Construction drawing");

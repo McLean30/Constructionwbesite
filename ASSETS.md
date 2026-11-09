@@ -4,7 +4,7 @@ Formwork Construction and Courtyard House are fictional. Every image on the site
 
 There are two kinds of imagery:
 
-1. **One AI-generated concept visualisation**, made with ChatGPT image generation and supplied by the repository owner (below).
+1. **Six AI-generated concept visualisations**, made with ChatGPT image generation and supplied by the repository owner (below).
 2. **Original illustrations and drawings** made in this repository. Image generation was not available when they were made, so they were drawn from scratch. The 3D views are rendered from a single procedural model of the Courtyard House by a small vector renderer written for this project. The scripts that produce every image are in the repository, so any image can be regenerated exactly:
 
 ```bash
@@ -28,12 +28,25 @@ Derived files, all made by `npm run crops` (`scripts/art/crop-visualisation.mjs`
 | --- | --- | --- |
 | `public/images/courtyard-house-visualisation.webp` | full frame, copied byte for byte | Homepage hero (desktop), project page opening and gallery view 1. The gold roofline over the hero is a separate SVG overlay traced on this image (see `scripts/art/roofline.md`); the image itself is unaltered |
 | `public/images/courtyard-house-visualisation-phone.webp` | 540, 0, 940 × 941 | Homepage hero on phones: courtyard and glazed living room |
-| `public/images/courtyard-house-visualisation-soffit.webp` | 1250, 150, 422 × 300 | Project sequence and gallery view 4: zinc roof edge meeting the oak soffit |
-| `public/images/courtyard-house-material-zinc.webp` | 90, 40, 520 × 300 | Material decision: zinc |
-| `public/images/courtyard-house-material-brick.webp` | 300, 340, 220 × 300 | Material decision: brick |
-| `public/images/courtyard-house-material-oak.webp` | 1262, 300, 180 × 300 | Material decision: oak |
 
 Responsive sizes (AVIF and WebP) are generated at request time by `next/image`. The source is 1672 px wide, so on screens wider than that the hero is shown at the source's own resolution. The brick, zinc and oak crops are displayed at a shared 240 px height, which keeps each at or below its native resolution.
+
+## Additional AI-generated concept visualisations
+
+Supplied by the repository owner as chat attachments on 9 November 2026 for `feature/formwork-black-gold-gallery`. They were generated with ChatGPT image generation, like the courtyard view above; the prompts were not supplied. Each was identified by its content. They are artistic views of the fictional house, so the window positions, roof form of the link and planting differ slightly between them. **The procedural model (`scripts/art/model.mjs`) and the construction drawings stay the geometric reference for the 3D explorer;** none of these images is used for its geometry.
+
+Originals are kept unaltered in `assets-src/`. `npm run crops` (`scripts/art/crop-visualisation.mjs`) writes the site copies, re-encoded once as WebP q84 or copied unchanged when that would be larger. `next/image` serves responsive AVIF/WebP sizes from them: gallery thumbnails at about 30% of the viewport, and the full asset only when a view is opened.
+
+| Content | Original (`assets-src/`) | Original size | SHA-256 | Site file (`public/images/`) | Site size | Used for |
+| --- | --- | --- | --- | --- | --- | --- |
+| Garden elevation: both gabled brick wings, glazed link with fire, birches, hills at dusk | `courtyard-house-garden-elevation-original.webp` | 1774 × 887, 460,816 B | `d9f8740b…40dbd216` | `courtyard-house-garden-elevation.webp` (copied unchanged) | 1774 × 887, 460,816 B | Gallery view 2; project page "The whole house" |
+| Sitting room: tartan armchair, fire, full-height glazing onto the wet courtyard and brick wing | `courtyard-house-sitting-room-original.webp` | 1672 × 941, 434,318 B | `8c23fa5c…cdfc5` | `courtyard-house-sitting-room.webp` | 1672 × 941, 333,734 B | Gallery view 4; homepage preview |
+| Junction: slim dark roof edge around an oak soffit with downlights, over buff brick and glazing | `courtyard-house-soffit-original.webp` | 1672 × 941, 377,846 B | `74e84ded…dda50` | `courtyard-house-soffit.webp` | 1672 × 941, 272,376 B | Gallery view 5; homepage preview; project page "Where zinc meets oak" |
+| Same, cropped to the oak boards (left 640, top 0, 900 × 600) | as above | | | `courtyard-house-material-oak.webp` | 900 × 600, 88,108 B | Material decision: oak |
+| Wet standing-seam zinc roof close-up, lit living room beyond | `courtyard-house-zinc-roof-original.webp` | 1672 × 941, 489,198 B | `28833e14…d93752` | `courtyard-house-material-zinc.webp` | 1672 × 941, 369,830 B | Material decision: zinc |
+| Buff brick corner close-up with autumn leaves | `courtyard-house-brick-original.webp` | 1672 × 941, 372,040 B | `498a2687…4cb4ed` | `courtyard-house-material-brick.webp` (copied unchanged) | 1672 × 941, 372,040 B | Material decision: brick |
+
+Full checksums are in the commit that added these files and can be recomputed with `sha256sum assets-src/*.webp`. The earlier 220–520 px material crops and the 422 × 300 px soffit crop have been replaced by these images.
 
 ## Original illustrations and drawings
 
@@ -64,23 +77,23 @@ The household, design brief and design details are fictional. There are no testi
 
 ## Gallery labels
 
-The Courtyard House gallery (`/gallery`, the homepage preview and the project page) labels every view:
+The Courtyard House gallery (`/gallery`, the project page and the homepage preview of views 3, 4 and 5) labels every view:
 
 | View | Label | Source |
 | --- | --- | --- |
-| 1. The courtyard | Concept visualisation · AI-generated | ChatGPT image generation, supplied by the owner |
-| 2. The street approach | Concept illustration | Original render, `art/courtyard-house-street.svg` |
-| 3. From the sitting room | Concept illustration | Original drawing, `art/courtyard-house-interior.svg` |
-| 4. Zinc meets oak | Detail crop · AI-generated visualisation | Crop of view 1 |
-| 5. How that junction is built | Construction drawing | `art/courtyard-house-detail.svg` |
-| 6. How the house fits together | Construction drawing | `art/courtyard-house-construction.svg` |
+| 1. The courtyard | Concept visualisation · AI-generated | `courtyard-house-visualisation.webp` |
+| 2. From the garden | Concept visualisation · AI-generated | `courtyard-house-garden-elevation.webp` |
+| 3. The street approach | Concept illustration | Original render, `art/courtyard-house-street.svg` |
+| 4. The sitting room | Concept visualisation · AI-generated | `courtyard-house-sitting-room.webp` |
+| 5. Zinc meets oak | Concept visualisation · AI-generated | `courtyard-house-soffit.webp` |
+| 6. How that junction is built | Construction drawing | `art/courtyard-house-detail.svg` |
+| 7. How the house fits together | Construction drawing | `art/courtyard-house-construction.svg` |
+
+The two construction drawings also appear beside the build explanation on the homepage.
 
 ### Missing photographic views
 
-Only the courtyard view exists as a photorealistic image. To give the gallery one consistent photographic style, these need to be produced, for example with the same image generator and lighting as the courtyard view:
+Still needed for a fully photographic gallery:
 
-1. **Street approach:** oblique view from the pavement showing the solid buff-brick frontage, the low entrance link and the oak front door (currently an illustration).
-2. **Interior:** from the west wing sitting room across the courtyard to the kitchen wing, with the garden glazing to one side (currently an illustration).
-3. **Garden elevation:** both wings from the lawn, with the full-height glazing under the deep oak soffits (the project page uses an illustration).
-4. **Material detail at full resolution:** the zinc, oak soffit and brick junction at 1600 px or wider. The current detail crop is only 422 × 300 px.
-5. **Brick, zinc and oak close-ups:** each at 1000 px or wider. The current crops are 220–520 px wide and are shown small for that reason.
+1. **Street approach:** an oblique view from the pavement showing the solid buff-brick frontage, the low entrance link and the oak front door. The gallery and homepage preview use the original illustration until one is supplied.
+2. **Higher-resolution hero:** the courtyard view is 1672 px wide, so very wide screens show it at about native size.

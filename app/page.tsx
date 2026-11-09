@@ -4,7 +4,7 @@ import { EnquiryForm } from "@/components/EnquiryForm";
 import { Gallery } from "@/components/Gallery";
 import { HeroVisual } from "@/components/HeroVisual";
 import { StageExplorer } from "@/components/StageExplorer";
-import { courtyardGallery, courtyardHouse, gallery } from "@/content/courtyard-house";
+import { constructionDrawings, courtyardGallery, courtyardHouse, gallery, homepagePreviewIds } from "@/content/courtyard-house";
 import { faqs, primaryAction, services } from "@/content/site";
 
 export default function HomePage() {
@@ -88,7 +88,7 @@ export default function HomePage() {
           </h2>
           <p className="section__lede">Each view shows something the last one didn&apos;t. Select an image to enlarge it.</p>
         </header>
-        <Gallery items={courtyardGallery} preview={3} />
+        <Gallery items={courtyardGallery} preview={homepagePreviewIds} />
       </section>
 
       {/* ---------- 4. Services ---------- */}
@@ -135,6 +135,11 @@ export default function HomePage() {
             </p>
           </header>
           <StageExplorer headingId="process-title" />
+          <div className="plate-drawings">
+            <h3 className="plate-drawings__title">Construction drawings</h3>
+            <p className="plate-drawings__lede">The section through the zinc and oak junction, and all four stages stacked in build order.</p>
+            <Gallery items={constructionDrawings} headingLevel={4} />
+          </div>
         </div>
       </section>
 
