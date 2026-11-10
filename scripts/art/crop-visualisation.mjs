@@ -17,13 +17,14 @@ const crops = [
 ];
 
 // Dedicated AI-generated views supplied for the gallery (see ASSETS.md): [source, output, crop|null, purpose]
+// The oak material uses courtyard-house-soffit.webp directly (no crop).
 const views = [
+  ["courtyard-house-street-approach-original.png", "courtyard-house-street-approach.webp", null, "street approach, gallery, homepage preview and design question"],
   ["courtyard-house-garden-elevation-original.webp", "courtyard-house-garden-elevation.webp", null, "garden elevation, gallery"],
   ["courtyard-house-sitting-room-original.webp", "courtyard-house-sitting-room.webp", null, "sitting room, gallery and homepage preview"],
   ["courtyard-house-soffit-original.webp", "courtyard-house-soffit.webp", null, "zinc edge and oak soffit junction"],
   ["courtyard-house-zinc-roof-original.webp", "courtyard-house-material-zinc.webp", null, "material: standing-seam zinc"],
   ["courtyard-house-brick-original.webp", "courtyard-house-material-brick.webp", null, "material: buff brick"],
-  ["courtyard-house-soffit-original.webp", "courtyard-house-material-oak.webp", [640, 0, 900, 600], "material: oak soffit boards"],
 ];
 
 for (const [file, left, top, width, height, purpose] of crops) {

@@ -4,11 +4,11 @@ import { EnquiryForm } from "@/components/EnquiryForm";
 import { Gallery } from "@/components/Gallery";
 import { HeroVisual } from "@/components/HeroVisual";
 import { StageExplorer } from "@/components/StageExplorer";
-import { constructionDrawings, courtyardGallery, courtyardHouse, gallery, homepagePreviewIds } from "@/content/courtyard-house";
+import { constructionDrawings, courtyardGallery, courtyardHouse, gallery, homepagePreviewIds, streetApproachImage } from "@/content/courtyard-house";
 import { faqs, primaryAction, services } from "@/content/site";
 
 export default function HomePage() {
-  const street = gallery.find((g) => g.id === "street")!;
+  const street = streetApproachImage;
   const interior = gallery.find((g) => g.id === "interior")!;
 
   return (
@@ -50,7 +50,7 @@ export default function HomePage() {
           <figure className="question__figure question__figure--street">
             <Image src={street.image} alt={street.alt} sizes="(min-width: 960px) 52vw, 100vw" placeholder="blur" quality={80} />
             <figcaption>
-              <span className="kind">Concept illustration</span> The street side: brick almost all the way.
+              <span className="kind">Concept visualisation · AI-generated</span> The street side: brick gables and one recessed entrance.
             </figcaption>
           </figure>
           <div className="question__text">

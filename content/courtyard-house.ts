@@ -11,7 +11,7 @@ import gardenElevation from "@/public/images/courtyard-house-garden-elevation.we
 import sittingRoom from "@/public/images/courtyard-house-sitting-room.webp";
 import brickDetail from "@/public/images/courtyard-house-material-brick.webp";
 import zincDetail from "@/public/images/courtyard-house-material-zinc.webp";
-import oakDetail from "@/public/images/courtyard-house-material-oak.webp";
+import streetApproach from "@/public/images/courtyard-house-street-approach.webp";
 import annotations from "@/content/generated/annotations.json";
 
 export interface Annotation {
@@ -88,9 +88,9 @@ export const courtyardHouse = {
       id: "oak",
       title: "Oak joinery",
       text: "Oak is used wherever people touch or look closely: the entrance door, window and door frames, and the soffit boards under the overhang. The same timber runs from the living room ceiling to the terrace, joining inside and outside.",
-      image: oakDetail,
-      alt: "Close view of oak soffit boards with a strong grain and a single recessed downlight, meeting a dark window frame.",
-      caption: "Crop of an AI-generated concept visualisation. Grained oak soffit boards with a recessed downlight.",
+      image: soffitDetail,
+      alt: "Looking up at an oak soffit: long, strongly grained boards with recessed downlights, edged by a slim dark roof trim and running out over buff brick and tall glazing.",
+      caption: "Concept visualisation · AI-generated. Grained oak soffit boards and downlights under the roof edge.",
     },
   ],
 };
@@ -180,6 +180,12 @@ export const soffitImage = {
   caption: "Concept visualisation · AI-generated. A slim dark roof edge wraps the oak soffit, which runs out over the brick and glazing.",
 };
 
+export const streetApproachImage = {
+  image: streetApproach,
+  alt: "Street approach at dusk: two buff-brick gables with dark standing-seam roofs either side of a low zinc-roofed link, whose recessed entrance has oak cladding, a tall oak door and a glazed door lit from inside, behind a wet gravel forecourt, a kerb and the road, with a large oak tree on the left and hills beyond.",
+  caption: "Concept visualisation · AI-generated. The entrance in the low link, between two brick gables.",
+};
+
 export const gardenElevationImage = {
   image: gardenElevation,
   alt: "Garden elevation at dusk: two buff-brick wings with dark standing-seam roofs and full-height glazing, a glazed living room with a fire between them, birch trees and wet paving in front, heathland grasses and hills behind.",
@@ -226,11 +232,11 @@ export const courtyardGallery: GalleryView[] = [
   },
   {
     id: "street",
-    kind: "Concept illustration",
+    kind: "Concept visualisation · AI-generated",
     title: "The street approach",
-    caption: "Mostly solid brick to the pavement, with the front door in the low link.",
-    image: byId("street").image,
-    alt: byId("street").alt,
+    caption: "Two brick gables either side of the low link, with an oak-clad entrance and glazed door behind a gravel forecourt.",
+    image: streetApproach,
+    alt: streetApproachImage.alt,
   },
   {
     id: "sitting-room",
@@ -266,7 +272,7 @@ export const courtyardGallery: GalleryView[] = [
   },
 ];
 
-/** Homepage preview: the street, the inside and one junction. */
+/** Homepage preview: the street, the inside and one junction (all AI-generated concept visualisations). */
 export const homepagePreviewIds = ["street", "sitting-room", "junction-view"];
 
 /** The two construction drawings, shown beside the build explanation. */

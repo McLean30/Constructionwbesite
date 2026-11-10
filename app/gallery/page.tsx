@@ -26,7 +26,7 @@ export default function GalleryPage() {
         </h1>
         <p className="section__lede">
           Seven views, in the order that explains the house: the courtyard, the whole house from the garden, the street, the sitting room, one
-          junction, and how it is built. Each is labelled as an AI-generated concept visualisation, an illustration or a construction drawing. The
+          junction, and how it is built. Each is labelled as an AI-generated concept visualisation or a construction drawing. The
           visualisations are artistic views of a fictional house; the drawings and the 3D model are the geometric reference. None is a photograph.
         </p>
       </header>

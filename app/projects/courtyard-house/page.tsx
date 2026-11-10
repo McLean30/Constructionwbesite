@@ -210,7 +210,7 @@ export default function CourtyardHousePage() {
           <h2 id="gallery-title" className="display display--md">
             Gallery
           </h2>
-          <p className="section__lede">Seven views in the order that explains the house. Each is labelled as an AI-generated concept visualisation, an illustration or a construction drawing. Select one to enlarge it.</p>
+          <p className="section__lede">Seven views in the order that explains the house. Each is labelled as an AI-generated concept visualisation or a construction drawing. Select one to enlarge it.</p>
         </header>
         <Gallery items={courtyardGallery} />
       </section>
